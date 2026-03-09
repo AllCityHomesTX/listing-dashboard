@@ -182,6 +182,7 @@ button{cursor:pointer;font-family:inherit;border:none;transition:all .15s}
     <div id="tabs">
       <button class="tab-btn active" onclick="switchView('agent',event)">Agent View</button>
       <button class="tab-btn" onclick="switchView('seller',event)">Seller Portal</button>
+      <button class="tab-btn" onclick="switchView('sites',event)">3rd-Party Sites</button>
     </div>
   </div>
 </div>
@@ -341,20 +342,233 @@ button{cursor:pointer;font-family:inherit;border:none;transition:all .15s}
         <div class="agent-avatar">CW</div>
         <div>
           <div class="agent-name">Chris Winstead</div>
-          <div class="agent-contact">All City Homes · (210) 985-7675 · chris@allcityhomestx.com</div>
+          <div class="agent-contact">All City Homes · (210) 985-7675 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c4a7acb6adb784a5a8a8a7adb0bdacaba9a1b7b0bceaa7aba9">[email&#160;protected]</a></div>
         </div>
       </div>
     </div>
 
   </div><!-- /seller -->
 
+  <!-- 3RD-PARTY SITES VIEW -->
+  <div id="view-sites" class="view">
+
+    <!-- Intro banner -->
+    <div class="welcome-banner" style="background:var(--navy);border-left-color:var(--tan)">
+      <div class="welcome-date">Understanding Online Home Valuations</div>
+      <div class="welcome-text">Sites like Zillow, Redfin, and Trulia show automated estimates that can differ significantly from your actual list price. Here's exactly what those numbers mean — and why they don't tell the full story for this home.</div>
+    </div>
+
+    <!-- Live estimate comparison -->
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">What the Sites Are Showing Right Now</h3></div></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+
+        <!-- Zillow -->
+        <div style="flex:1;min-width:220px;background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:16px 18px;border-top:3px solid #006AFF">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+            <div style="font-weight:900;font-family:'Lato',sans-serif;font-size:15px;color:#006AFF;letter-spacing:.5px">ZILLOW</div>
+            <span class="badge badge-gray">Zestimate®</span>
+          </div>
+          <div style="font-size:26px;font-weight:900;font-family:'Lato',sans-serif;color:var(--charcoal)">$267,100</div>
+          <div style="font-size:11px;color:var(--midgray);margin-top:4px;font-weight:600">vs. List Price $272,000</div>
+          <div style="margin-top:10px;padding:8px 10px;background:rgba(166,50,40,.06);border-radius:5px;border:1px solid rgba(166,50,40,.2)">
+            <div style="font-size:11px;color:var(--red);font-weight:700">$4,900 BELOW LIST PRICE</div>
+            <div style="font-size:11px;color:#6B6966;margin-top:2px">−1.8% gap</div>
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:var(--midgray)">Listed price/sqft: <strong style="color:var(--charcoal)">$182</strong> · Zillow shows: <strong style="color:var(--charcoal)">$182</strong></div>
+          <div style="margin-top:6px;font-size:11px;color:var(--midgray)">Zillow estimated sale range: <strong style="color:var(--charcoal)">$240K – $294K</strong></div>
+        </div>
+
+        <!-- Redfin -->
+        <div style="flex:1;min-width:220px;background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:16px 18px;border-top:3px solid #CC0000">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+            <div style="font-weight:900;font-family:'Lato',sans-serif;font-size:15px;color:#CC0000;letter-spacing:.5px">REDFIN</div>
+            <span class="badge badge-gray">Redfin Estimate</span>
+          </div>
+          <div style="font-size:26px;font-weight:900;font-family:'Lato',sans-serif;color:var(--charcoal)">~$265K–$275K</div>
+          <div style="font-size:11px;color:var(--midgray);margin-top:4px;font-weight:600">Estimated range (live data varies)</div>
+          <div style="margin-top:10px;padding:8px 10px;background:rgba(204,176,145,.1);border-radius:5px;border:1px solid rgba(204,176,145,.3)">
+            <div style="font-size:11px;color:#8B6A3A;font-weight:700">CLOSE TO LIST PRICE</div>
+            <div style="font-size:11px;color:#6B6966;margin-top:2px">Redfin has MLS access in TX</div>
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:var(--midgray)">78247 median days on market: <strong style="color:var(--charcoal)">~51 days</strong></div>
+          <div style="margin-top:6px;font-size:11px;color:var(--midgray)">78247 homes sell ~<strong style="color:var(--charcoal)">2% below list price</strong></div>
+        </div>
+
+        <!-- Trulia -->
+        <div style="flex:1;min-width:220px;background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:16px 18px;border-top:3px solid #5A2D82">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+            <div style="font-weight:900;font-family:'Lato',sans-serif;font-size:15px;color:#5A2D82;letter-spacing:.5px">TRULIA</div>
+            <span class="badge badge-gray">Powered by Zillow</span>
+          </div>
+          <div style="font-size:26px;font-weight:900;font-family:'Lato',sans-serif;color:var(--charcoal)">~$267,100</div>
+          <div style="font-size:11px;color:var(--midgray);margin-top:4px;font-weight:600">Mirrors Zillow's Zestimate data</div>
+          <div style="margin-top:10px;padding:8px 10px;background:rgba(90,45,130,.06);border-radius:5px;border:1px solid rgba(90,45,130,.2)">
+            <div style="font-size:11px;color:#5A2D82;font-weight:700">SAME SOURCE AS ZILLOW</div>
+            <div style="font-size:11px;color:#6B6966;margin-top:2px">Zillow owns Trulia since 2015</div>
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:var(--midgray)">Trulia pulls from the same algorithm as Zillow — not independent data.</div>
+        </div>
+      </div>
+
+      <!-- Chart: estimate vs list vs neighborhood -->
+      <div class="card">
+        <div class="sec-lbl" style="margin-bottom:12px">Estimate Comparison vs. List Price & Neighborhood</div>
+        <div class="chart-wrap" style="height:200px"><canvas id="sites-compare-chart"></canvas></div>
+        <div class="takeaway takeaway-pos" style="margin-top:10px">✓ <strong>Your list price of $272,000</strong> falls within or above all automated estimates — and is $11,688 below the declining neighborhood average. This is a well-positioned price, not an overpriced one.</div>
+      </div>
+    </div>
+
+    <!-- Why the gap exists -->
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Why These Numbers Differ — And Why That Matters</h3></div></div>
+
+      <div class="chip chip-flag">
+        <div class="chip-icon">🤖</div>
+        <div>
+          <div class="chip-title">Texas Doesn't Disclose Sale Prices Publicly</div>
+          <div class="chip-body">Texas is a "non-disclosure state." That means actual sale prices are NOT filed with the county — they're only available through the MLS. Zillow and Trulia cannot access this data directly, so their algorithms are working with incomplete information. This is the single biggest reason estimates in Texas are less reliable than in other states.</div>
+        </div>
+      </div>
+
+      <div class="chip chip-flag">
+        <div class="chip-icon">📊</div>
+        <div>
+          <div class="chip-title">Algorithms Miss What Makes This Home Unique</div>
+          <div class="chip-body">Zillow's Zestimate cannot see the greenbelt backing, the mature trees, the quality of the patio, or the condition of the interior. It works from tax records and square footage alone. The listing description says this home has been shown to be clean and in good condition — features an algorithm simply cannot price.</div>
+        </div>
+      </div>
+
+      <div class="chip chip-warn">
+        <div class="chip-icon">📅</div>
+        <div>
+          <div class="chip-title">Automated Estimates Lag Behind the Market</div>
+          <div class="chip-body">Zillow acknowledges a nationwide median error rate of 1.83% for active listings — that's a potential swing of ±$5,000 on this home. For off-market homes the error rate climbs to 7%. More importantly, algorithms react slowly to neighborhood-level shifts like the 11.5% decline in Burning Wood over 2 years.</div>
+        </div>
+      </div>
+
+      <div class="chip chip-pos">
+        <div class="chip-icon">✓</div>
+        <div>
+          <div class="chip-title">Even Zillow's Founder Sold His Own Home 40% Below Zestimate</div>
+          <div class="chip-body">In 2016, Zillow co-founder Spencer Rascoff sold his Seattle home for $1.05M — 40% below its own Zestimate of $1.75M. Zillow even shut down its own home-buying program in 2021 after losing $881M using its algorithm to price homes. These aren't algorithm critiques — they're Zillow's own public record.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accuracy breakdown -->
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">How Accurate Are These Estimates, Really?</h3></div></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+        <div style="flex:1;min-width:170px;background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:14px;text-align:center;border-top:3px solid var(--tan)">
+          <div style="font-size:28px;font-weight:900;font-family:'Lato',sans-serif;color:var(--navy)">1.83%</div>
+          <div style="font-size:10px;color:var(--midgray);margin-top:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Zillow Median Error</div>
+          <div style="font-size:11px;color:#6B6966;margin-top:4px">For homes actively listed</div>
+        </div>
+        <div style="flex:1;min-width:170px;background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:14px;text-align:center;border-top:3px solid var(--red)">
+          <div style="font-size:28px;font-weight:900;font-family:'Lato',sans-serif;color:var(--red)">7.01%</div>
+          <div style="font-size:10px;color:var(--midgray);margin-top:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Off-Market Error</div>
+          <div style="font-size:11px;color:#6B6966;margin-top:4px">Before a home is listed on MLS</div>
+        </div>
+        <div style="flex:1;min-width:170px;background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:14px;text-align:center;border-top:3px solid var(--tan)">
+          <div style="font-size:28px;font-weight:900;font-family:'Lato',sans-serif;color:var(--navy)">$4,900</div>
+          <div style="font-size:10px;color:var(--midgray);margin-top:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Zillow's Gap on This Home</div>
+          <div style="font-size:11px;color:#6B6966;margin-top:4px">Zestimate vs. list price</div>
+        </div>
+        <div style="flex:1;min-width:170px;background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:14px;text-align:center;border-top:3px solid var(--green)">
+          <div style="font-size:28px;font-weight:900;font-family:'Lato',sans-serif;color:var(--green)">MLS</div>
+          <div style="font-size:10px;color:var(--midgray);margin-top:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Most Accurate Source</div>
+          <div style="font-size:11px;color:#6B6966;margin-top:4px">Only source with actual TX sold prices</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec-lbl" style="margin-bottom:12px">Potential Error Range at $272,000 List Price</div>
+        <div class="chart-wrap" style="height:180px"><canvas id="error-range-chart"></canvas></div>
+        <div style="font-size:11px;color:var(--midgray);margin-top:8px;text-align:center">Bars show the potential high/low swing for Zillow (active), Zillow (off-market), and MLS-based CMA at this price point.</div>
+      </div>
+    </div>
+
+    <!-- What a CMA is -->
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">How the List Price Was Actually Set</h3></div></div>
+      <div class="card" style="border-top:3px solid var(--navy)">
+        <div style="display:flex;gap:18px;flex-wrap:wrap">
+          <div style="flex:2;min-width:260px">
+            <div style="font-size:14px;font-weight:700;font-family:'Lato',sans-serif;color:var(--navy);margin-bottom:8px">Comparative Market Analysis (CMA)</div>
+            <div style="font-size:13px;color:#4A4846;line-height:1.75">A CMA goes far beyond what any algorithm can do. Your All City Homes agent personally reviewed:</div>
+            <ul style="margin:10px 0 0 18px;font-size:13px;color:#4A4846;line-height:2">
+              <li>Recent sold homes within 0.5 miles with similar size and features</li>
+              <li>Active competing listings that buyers are comparing right now</li>
+              <li>Expired listings — homes that sat unsold and why</li>
+              <li>Neighborhood price trend data from SABOR (the actual MLS)</li>
+              <li>Property-specific factors: greenbelt lot, condition, garage, fireplace</li>
+            </ul>
+            <div style="margin-top:12px;font-size:13px;color:#4A4846;line-height:1.75">No algorithm has access to this combination of real, local, MLS-sourced data. The $272,000 list price reflects what actual buyers in this zip code are paying for comparable homes right now.</div>
+          </div>
+          <div style="flex:1;min-width:200px">
+            <div style="background:var(--offwhite);border-radius:8px;padding:16px;height:100%">
+              <div style="font-size:10px;font-weight:700;color:var(--midgray);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">CMA vs. Algorithm</div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="font-size:12px">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-weight:700;color:var(--navy)">CMA</span><span class="badge badge-green">Local Expert</span></div>
+                  <div style="color:#6B6966;font-size:11px">Uses real sold prices from SABOR. Accounts for condition, lot, and unique features. Validated by a licensed agent.</div>
+                </div>
+                <div style="border-top:1px solid var(--card-border);padding-top:10px;font-size:12px">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-weight:700;color:var(--midgray)">Algorithm</span><span class="badge badge-gray">Estimate Only</span></div>
+                  <div style="color:#6B6966;font-size:11px">Uses public tax records. Cannot access TX sale prices. Misses condition, updates, and lot features.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Talking points for buyers -->
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Talking Points — If a Buyer Brings Up Zillow</h3></div></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="quote-card" style="border-left-color:var(--navy)">
+          <div class="quote-text" style="font-style:normal;font-weight:600;color:var(--navy)">"The Zillow estimate is $4,900 below list — does that mean it's overpriced?"</div>
+          <div style="margin-top:8px;font-size:13px;color:#4A4846;line-height:1.65">Not at all. A $4,900 gap is actually very close — well within Zillow's own published error range of 1.83% for active listings, which on this home equals ±$5,000. Texas also doesn't publicly disclose sale prices, so Zillow's algorithm is working with incomplete data. The list price was set using actual SABOR MLS sold data that Zillow simply doesn't have access to.</div>
+        </div>
+        <div class="quote-card" style="border-left-color:var(--navy)">
+          <div class="quote-text" style="font-style:normal;font-weight:600;color:var(--navy)">"Why is the Zillow range so wide — $240K to $294K?"</div>
+          <div style="margin-top:8px;font-size:13px;color:#4A4846;line-height:1.65">A wide range is Zillow's way of signaling uncertainty. It means the algorithm doesn't have enough data to be confident — which is exactly the Texas non-disclosure problem. The wider the range, the less Zillow actually knows. A narrow range from a CMA using real local data is far more meaningful.</div>
+        </div>
+        <div class="quote-card" style="border-left-color:var(--navy)">
+          <div class="quote-text" style="font-style:normal;font-weight:600;color:var(--navy)">"Redfin seems closer to list price — should I trust that more?"</div>
+          <div style="margin-top:8px;font-size:13px;color:#4A4846;line-height:1.65">Redfin does have MLS access in Texas which makes its estimates somewhat more accurate. Their own data shows 78247 homes sell for about 2% below list price in roughly 51 days. At $272,000, a 2% discount would bring an offer to about $266,560 — which would still be a fair negotiation. The listing is priced to reflect that reality.</div>
+        </div>
+        <div class="quote-card" style="border-left-color:var(--navy)">
+          <div class="quote-text" style="font-style:normal;font-weight:600;color:var(--navy)">"Trulia shows the same as Zillow — is that a coincidence?"</div>
+          <div style="margin-top:8px;font-size:13px;color:#4A4846;line-height:1.65">No coincidence — Zillow acquired Trulia in 2015. Both sites run on the same algorithm and share the same data. You're essentially looking at one source, not two independent opinions. Always check Redfin as well for a genuinely separate estimate.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agent CTA -->
+    <div class="agent-note">
+      <div class="agent-note-lbl">Want a Full CMA for This Property?</div>
+      <div class="agent-note-text">If you have specific questions about the pricing methodology for this home, or if you're a buyer who wants to understand exactly how it compares to recently sold homes in the area, Chris can walk you through the full Comparative Market Analysis. It includes actual MLS sold data that no website can show you.</div>
+      <div class="agent-sig">
+        <div class="agent-avatar">CW</div>
+        <div>
+          <div class="agent-name">Chris Winstead</div>
+          <div class="agent-contact">All City Homes · (210) 985-7675 · chris@allcityhomestx.com</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /sites -->
+
 </div><!-- /content -->
 
 <div id="footer">
-  <p>All City Homes · Chris Winstead · chris@allcityhomestx.com · Data sourced from LERA MLS / SABOR · Updated March 9, 2026</p>
+  <p>All City Homes · Chris Winstead · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="92f1fae0fbe1d2f3fefef1fbe6ebfafdfff7e1e6eabcf1fdff">[email&#160;protected]</a> · Data sourced from LERA MLS / SABOR · Updated March 9, 2026</p>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── Data ─────────────────────────────────────────
 const SHOWINGS = [
   {date:'Feb 15',ts:new Date('2026-02-15'),time:'4:15–5:00 PM',agent:'Sarah Dietz',office:'Keller Williams Heritage',interest:'Somewhat',price:'Just Right',comment:'Nice house. Something to think about.'},
@@ -529,9 +743,89 @@ function renderSellerMarket() {
   charts['seller-market'] = new Chart(ctx,{type:'line',data:{labels:d.labels,datasets:[{label:'Burning Wood Avg',data:d.nb,borderColor:C.tan,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:C.tan,pointRadius:4,tension:.3},{label:'MLS Overall Avg',data:d.mls,borderColor:C.navy,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:C.navy,pointRadius:4,tension:.3,borderDash:[5,4]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#6B6966',font:{size:11}}},tooltip:{...TT,callbacks:{label:c=>fmt(c.raw)}}},scales:{x:{grid:GRID,ticks:TICK,border:{display:false}},y:{grid:GRID,ticks:{...TICK,callback:v=>'$'+(v/1000).toFixed(0)+'K'},border:{display:false}}}}});
 }
 
+// ── Sites Charts ──────────────────────────────────
+function renderSitesCharts() {
+  // Bar chart: estimate comparison
+  destroyChart('sites-compare');
+  const ctx1 = document.getElementById('sites-compare-chart').getContext('2d');
+  charts['sites-compare'] = new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: ['Zillow\nZestimate', 'Redfin\nEstimate', 'Trulia\n(= Zillow)', 'Your\nList Price', 'Neighborhood\nAvg (Feb 2026)'],
+      datasets: [{
+        data: [267100, 270000, 267100, 272000, 283688],
+        backgroundColor: ['#006AFF','#CC0000','#5A2D82', C.tan, C.navy],
+        borderRadius: 4,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { ...TT, callbacks: { label: c => fmt(c.raw) } }
+      },
+      scales: {
+        x: { grid: GRID, ticks: { ...TICK, maxRotation: 0 }, border: { display: false } },
+        y: { grid: GRID, ticks: { ...TICK, callback: v => '$' + (v/1000).toFixed(0) + 'K' }, border: { display: false }, min: 250000 }
+      }
+    }
+  });
+
+  // Error range chart
+  destroyChart('error-range');
+  const ctx2 = document.getElementById('error-range-chart').getContext('2d');
+  const base = 272000;
+  charts['error-range'] = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: ['Zillow (Active Listing)\n±1.83%', 'Zillow (Off-Market)\n±7.01%', 'MLS-Based CMA\n±0.5–1%'],
+      datasets: [
+        {
+          label: 'Low Estimate',
+          data: [base * (1 - 0.0183), base * (1 - 0.0701), base * (1 - 0.005)],
+          backgroundColor: 'rgba(166,50,40,0.6)',
+          borderRadius: 4,
+          borderSkipped: false,
+        },
+        {
+          label: 'High Estimate',
+          data: [base * (1 + 0.0183), base * (1 + 0.0701), base * (1 + 0.005)],
+          backgroundColor: 'rgba(45,122,79,0.6)',
+          borderRadius: 4,
+          borderSkipped: false,
+        },
+        {
+          label: 'List Price $272,000',
+          data: [272000, 272000, 272000],
+          type: 'line',
+          borderColor: C.tan,
+          borderWidth: 2,
+          pointBackgroundColor: C.tan,
+          pointRadius: 4,
+          borderDash: [6, 3],
+          fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#6B6966', font: { size: 11, family: "'Open Sans',sans-serif" } } },
+        tooltip: { ...TT, callbacks: { label: c => c.dataset.label + ': ' + fmt(Math.round(c.raw)) } }
+      },
+      scales: {
+        x: { grid: GRID, ticks: { ...TICK, maxRotation: 0 }, border: { display: false } },
+        y: { grid: GRID, ticks: { ...TICK, callback: v => '$' + (v/1000).toFixed(0) + 'K' }, border: { display: false }, min: 245000 }
+      }
+    }
+  });
+}
+
 function render() {
   renderKPIs(); renderActivityChart(); renderMarketChart();
   renderPies(); renderLog(); renderSellerTimeline(); renderSellerMarket();
+  renderSitesCharts();
 }
 render();
 </script>
