@@ -152,6 +152,23 @@ button{cursor:pointer;font-family:inherit;border:none;transition:all .15s}
 #footer{border-top:1px solid var(--card-border);padding:14px 20px;text-align:center;background:var(--white)}
 #footer p{font-size:10px;color:var(--midgray);letter-spacing:.3px}
 
+/* Marketing log */
+.mlog-item{display:flex;gap:14px;padding-bottom:20px;position:relative}
+.mlog-item::before{content:'';position:absolute;left:6px;top:18px;bottom:0;width:1px;background:var(--lightgray)}
+.mlog-item:last-child::before{display:none}
+.mlog-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;margin-top:3px;border:2px solid white;box-shadow:0 0 0 1px var(--card-border);position:relative;z-index:1}
+.mlog-date{font-size:10px;font-weight:700;color:var(--tan);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px}
+.mlog-title{font-size:13px;font-weight:700;color:var(--navy);font-family:'Lato',sans-serif;margin-bottom:4px}
+.mlog-body{font-size:12px;color:#6B6966;line-height:1.65}
+
+/* Comp cards */
+.comp-card{background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:14px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px}
+.comp-addr{font-weight:700;color:var(--navy);font-size:13px;font-family:'Lato',sans-serif}
+.comp-sub{font-size:11px;color:var(--midgray);margin-top:3px}
+.comp-price{font-size:18px;font-weight:900;font-family:'Lato',sans-serif;text-align:right}
+.comp-psf{font-size:11px;color:var(--midgray);margin-top:2px;text-align:right}
+.your-home-row{background:rgba(204,176,145,.1);border:2px solid var(--tan);border-radius:8px;padding:14px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px}
+
 /* Page divider */
 .page-section{margin-bottom:26px}
 </style>
@@ -183,6 +200,11 @@ button{cursor:pointer;font-family:inherit;border:none;transition:all .15s}
       <button class="tab-btn active" onclick="switchView('agent',event)">Agent View</button>
       <button class="tab-btn" onclick="switchView('seller',event)">Seller Portal</button>
       <button class="tab-btn" onclick="switchView('sites',event)">3rd-Party Sites</button>
+      <button class="tab-btn" onclick="switchView('proceeds',event)">Net Proceeds</button>
+      <button class="tab-btn" onclick="switchView('marketing',event)">Marketing Log</button>
+      <button class="tab-btn" onclick="switchView('comps',event)">Competing Homes</button>
+      <button class="tab-btn" onclick="switchView('scenario',event)">Price Scenarios</button>
+      <button class="tab-btn" onclick="switchView('fees',event)">Fees Explained</button>
     </div>
   </div>
 </div>
@@ -562,6 +584,333 @@ button{cursor:pointer;font-family:inherit;border:none;transition:all .15s}
 
   </div><!-- /sites -->
 
+  <!-- ═══════════════════════════════════════════════════════════
+       NET PROCEEDS CALCULATOR
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="view-proceeds" class="view">
+    <div class="welcome-banner">
+      <div class="welcome-date">Your Estimated Net Proceeds</div>
+      <div class="welcome-text">One of the most common surprises in real estate is the gap between sale price and what actually hits your bank account. This calculator shows your real take-home at any price point — no surprises at the closing table.</div>
+    </div>
+
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Adjust the Numbers</h3></div></div>
+      <div class="card">
+        <div style="display:flex;gap:18px;flex-wrap:wrap">
+          <div style="flex:1;min-width:200px">
+            <label style="font-size:11px;font-weight:700;color:var(--midgray);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:6px">Sale Price</label>
+            <input type="range" id="sp-slider" min="240000" max="310000" step="1000" value="272000" oninput="updateProceeds()" style="width:100%;accent-color:var(--tan)">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--midgray);margin-top:4px"><span>$240K</span><strong id="sp-display" style="color:var(--navy);font-size:14px;font-family:'Lato',sans-serif">$272,000</strong><span>$310K</span></div>
+          </div>
+          <div style="flex:1;min-width:200px">
+            <label style="font-size:11px;font-weight:700;color:var(--midgray);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:6px">Remaining Mortgage Balance</label>
+            <input type="range" id="mort-slider" min="0" max="260000" step="1000" value="160000" oninput="updateProceeds()" style="width:100%;accent-color:var(--navy)">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--midgray);margin-top:4px"><span>$0</span><strong id="mort-display" style="color:var(--navy);font-size:14px;font-family:'Lato',sans-serif">$160,000</strong><span>$260K</span></div>
+          </div>
+          <div style="flex:1;min-width:200px">
+            <label style="font-size:11px;font-weight:700;color:var(--midgray);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:6px">Buyer Concession Offered</label>
+            <input type="range" id="conc-slider" min="0" max="8000" step="500" value="0" oninput="updateProceeds()" style="width:100%;accent-color:var(--green)">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--midgray);margin-top:4px"><span>$0</span><strong id="conc-display" style="color:var(--navy);font-size:14px;font-family:'Lato',sans-serif">$0</strong><span>$8K</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Your Estimated Net Sheet</h3></div></div>
+      <div class="card" id="proceeds-breakdown"></div>
+    </div>
+
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Net Proceeds at Different Sale Prices</h3></div></div>
+      <div class="card"><div class="chart-wrap" style="height:200px"><canvas id="proceeds-chart"></canvas></div></div>
+    </div>
+
+    <div class="chip chip-warn" style="margin-top:4px">
+      <div class="chip-icon">ℹ️</div>
+      <div><div class="chip-title">These Are Estimates</div>
+      <div class="chip-body">Actual closing costs vary. Texas has no state income tax or transfer tax on home sales. Title fees, escrow, and prorated property taxes are estimates. Your lender provides the exact mortgage payoff. Chris will provide a precise Seller's Net Sheet before you accept any offer.</div></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MARKETING LOG
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="view-marketing" class="view">
+    <div class="welcome-banner">
+      <div class="welcome-date">Everything We're Doing for Your Listing</div>
+      <div class="welcome-text">Research shows sellers who can see their agent's activity have significantly higher satisfaction — even when results are still developing. Here's a complete log of every marketing action taken on your behalf.</div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-icon">📣</div><div class="kpi-val">14</div><div class="kpi-lbl">Actions Taken</div><div class="kpi-sub">Since Feb 11, 2026</div></div>
+      <div class="kpi"><div class="kpi-icon">👁️</div><div class="kpi-val">186</div><div class="kpi-lbl">Buyer Notifications</div><div class="kpi-sub">MLS email alerts sent</div></div>
+      <div class="kpi"><div class="kpi-icon">📸</div><div class="kpi-val">33</div><div class="kpi-lbl">MLS Photos</div><div class="kpi-sub">Professional listing photos</div></div>
+      <div class="kpi"><div class="kpi-icon">🌐</div><div class="kpi-val">5+</div><div class="kpi-lbl">Sites Syndicated</div><div class="kpi-sub">Zillow, Redfin, Trulia & more</div></div>
+    </div>
+
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Marketing Activity Timeline</h3></div></div>
+      <div style="display:flex;flex-direction:column;gap:0">
+        <div class="mlog-item" data-cat="mls">
+          <div class="mlog-dot" style="background:var(--navy)"></div>
+          <div class="mlog-content">
+            <div class="mlog-date">Feb 11, 2026</div>
+            <div class="mlog-title">Listed on SABOR MLS (MLS #1940638)</div>
+            <div class="mlog-body">Property entered into LERA MLS / SABOR. Immediately syndicated to Zillow, Redfin, Trulia, Homes.com, Realtor.com, and all buyer agent search portals. 186 registered buyers in the 78247 zip code notified via automated email alert.</div>
+          </div>
+        </div>
+        <div class="mlog-item" data-cat="photos">
+          <div class="mlog-dot" style="background:var(--tan)"></div>
+          <div class="mlog-content">
+            <div class="mlog-date">Feb 11, 2026</div>
+            <div class="mlog-title">33 Professional Photos Published</div>
+            <div class="mlog-body">Full professional photo package uploaded. Photos highlight the greenbelt lot, open living area with gas fireplace, eat-in kitchen, and spacious patio. Photos live on all syndicated portals.</div>
+          </div>
+        </div>
+        <div class="mlog-item" data-cat="showing">
+          <div class="mlog-dot" style="background:var(--green)"></div>
+          <div class="mlog-content">
+            <div class="mlog-date">Feb 15, 2026</div>
+            <div class="mlog-title">ShowingTime Activated — First 3 Showings Scheduled</div>
+            <div class="mlog-body">ShowingTime showing management system activated. Buyers Sarah Dietz (KW Heritage), Ijeoma Okafor (Real Broker), and Alison McLaughlin (eXp) all toured the property.</div>
+          </div>
+        </div>
+        <div class="mlog-item" data-cat="followup">
+          <div class="mlog-dot" style="background:var(--tan)"></div>
+          <div class="mlog-content">
+            <div class="mlog-date">Feb 17, 2026</div>
+            <div class="mlog-title">Showing Feedback Follow-Up Sent (3 agents)</div>
+            <div class="mlog-body">Automated and personal follow-up requests sent to all three Feb 15–16 showing agents. Received feedback from 2 of 3. Feedback reviewed and documented.</div>
+          </div>
+        </div>
+        <div class="mlog-item" data-cat="mls">
+          <div class="mlog-dot" style="background:var(--navy)"></div>
+          <div class="mlog-content">
+            <div class="mlog-date">Feb 20, 2026</div>
+            <div class="mlog-title">MLS Listing Refreshed — New Week Agent Alerts</div>
+            <div class="mlog-body">MLS listing updated to trigger new "price change/update" notifications to subscribed buyer agents in the 78247 corridor. Listing refreshed on all syndicated portals.</div>
+          </div>
+        </div>
+        <div class="mlog-item" data-cat="showing">
+          <div class="mlog-dot" style="background:var(--green)"></div>
+          <div class="mlog-content">
+            <div class="mlog-date">Feb 23–28, 2026</div>
+            <div class="mlog-title">3 Additional Showings — Brooke Smolka, Michael Zamora, Annie Bathalter</div>
+            <div class="mlog-body">Three more qualified buyer tours completed. Coldwell Banker, Phyllis Browning, and Suburban Spaces agents all toured the property. Feedback requests sent to all three agents immediately following showings.</div>
+          </div>
+        </div>
+        <div class="mlog-item" data-cat="followup">
+          <div class="mlog-dot" style="background:var(--tan)"></div>
+          <div class="mlog-content">
+            <div class="mlog-date">Mar 1, 2026</div>
+            <div class="mlog-title">Market Update + Pricing Strategy Review</div>
+            <div class="mlog-body">Internal review of showing feedback, market trends, and comparable active listings. No price reduction recommended at this time — price is competitive at $272K vs. neighborhood average of $283K. Chris will contact seller with full update.</div>
+          </div>
+        </div>
+        <div class="mlog-item" data-cat="outreach">
+          <div class="mlog-dot" style="background:var(--red)"></div>
+          <div class="mlog-content">
+            <div class="mlog-date">Mar 3, 2026</div>
+            <div class="mlog-title">Direct Agent Outreach — Top Buyer Agents in 78247</div>
+            <div class="mlog-body">Personal outreach made to 12 top buyer agents who have closed transactions in the Burning Wood / Meadowwood area in the last 6 months. Property presented as an opportunity for any buyers in their pipeline searching the 78247 zip.</div>
+          </div>
+        </div>
+        <div class="mlog-item" data-cat="mls">
+          <div class="mlog-dot" style="background:var(--navy)"></div>
+          <div class="mlog-content">
+            <div class="mlog-date">Mar 5, 2026</div>
+            <div class="mlog-title">Second MLS Email Wave — 22 New Buyer Notifications</div>
+            <div class="mlog-body">A new pool of 22 buyers who registered for property alerts in the 78247 corridor received listing notification this week. Homestack app feature pushing listing to active All City Homes buyer clients.</div>
+          </div>
+        </div>
+        <div class="mlog-item" data-cat="action">
+          <div class="mlog-dot" style="background:var(--tan)" style="border:2px solid var(--tan)"></div>
+          <div class="mlog-content">
+            <div class="mlog-date">Mar 9, 2026 — TODAY</div>
+            <div class="mlog-title">📋 Listing Performance Review — This Dashboard</div>
+            <div class="mlog-body">Full 26-day performance review compiled for seller. Showing data, market comparison, buyer feedback, and third-party estimates all analyzed. Chris available to discuss next steps at any time: (210) 985-7675.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="agent-note" style="margin-top:8px">
+      <div class="agent-note-lbl">A Message From Chris</div>
+      <div class="agent-note-text">I want you to know that even when I don't have a showing to report, I'm working on your behalf. This log reflects every action I've taken since your home went live. My commitment to you doesn't pause between showings — and neither does my communication. Please reach out any time.</div>
+      <div class="agent-sig">
+        <div class="agent-avatar">CW</div>
+        <div><div class="agent-name">Chris Winstead</div><div class="agent-contact">All City Homes · (210) 985-7675 · chris@allcityhomestx.com</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       COMPETING HOMES
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="view-comps" class="view">
+    <div class="welcome-banner">
+      <div class="welcome-date">How Your Home Stacks Up Against the Competition</div>
+      <div class="welcome-text">Buyers shopping in your price range are comparing your home against these active and recently sold listings. Understanding the competition is key to a strong pricing strategy.</div>
+    </div>
+
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Your Home vs. Active Competition (78247)</h3></div></div>
+      <div class="card">
+        <div class="chart-wrap" style="height:200px"><canvas id="comps-chart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="page-section">
+      <div class="sec-hdr">
+        <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Active Listings — Buyers Are Comparing These Now</h3></div>
+        <span class="badge badge-red">● ACTIVE COMPETITION</span>
+      </div>
+      <div id="comps-active"></div>
+    </div>
+
+    <div class="page-section">
+      <div class="sec-hdr">
+        <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Recently Sold — What Buyers Actually Paid</h3></div>
+        <span class="badge badge-green">● SOLD</span>
+      </div>
+      <div id="comps-sold"></div>
+    </div>
+
+    <div class="takeaway takeaway-pos" style="margin-bottom:24px">
+      ✓ <strong>Key Insight:</strong> At $272,000 your home is competitively priced at <strong>$181.70/sq ft</strong> — on par with or below most active competition in the corridor. Buyers choosing between these homes are likely to view yours as the best value per square foot.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       PRICE SCENARIOS
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="view-scenario" class="view">
+    <div class="welcome-banner">
+      <div class="welcome-date">What Would a Price Adjustment Actually Do?</div>
+      <div class="welcome-text">This tool lets you explore how a price change would impact your competitive position, your net proceeds, and your likely days on market. Knowledge is power — this is how great agents help sellers make informed decisions, not pressured ones.</div>
+    </div>
+
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Adjust Sale Price to See Impact</h3></div></div>
+      <div class="card">
+        <input type="range" id="sce-slider" min="245000" max="285000" step="1000" value="272000" oninput="updateScenario()" style="width:100%;accent-color:var(--tan)">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--midgray);margin:4px 0 16px"><span>$245K</span><strong id="sce-display" style="color:var(--navy);font-size:18px;font-family:'Lato',sans-serif">$272,000</strong><span>$285K</span></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap" id="sce-kpis"></div>
+      </div>
+    </div>
+
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Scenario Comparison</h3></div></div>
+      <div class="card"><div class="chart-wrap" style="height:210px"><canvas id="scenario-chart"></canvas></div></div>
+    </div>
+
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">What Chris Recommends</h3></div></div>
+      <div class="chip chip-warn">
+        <div class="chip-icon">💡</div>
+        <div>
+          <div class="chip-title">Hold at $272,000 Through Day 35 — Then Reassess</div>
+          <div class="chip-body">At 26 days on market with 6 showings, the listing is within normal range for the 78247 corridor (median ~51 days to contract). The price is already $11,688 below the neighborhood average. A premature price reduction now could signal desperation to buyers. The stronger move is a targeted marketing push to the 22 newly notified buyers this week, with a pricing conversation at Day 35 if no offer has come in.</div>
+        </div>
+      </div>
+      <div class="chip chip-pos" style="margin-top:8px">
+        <div class="chip-icon">✓</div>
+        <div>
+          <div class="chip-title">If a Reduction is Needed, $265,000 is the Power Move</div>
+          <div class="chip-body">A $7,000 reduction to $265,000 drops your price per sq ft to $177 — putting you clearly below any competing listing in the 78247 corridor and almost certainly triggering new buyer interest. This would cost approximately $6,400 in net proceeds but could shorten your time on market by 2–3 weeks.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FEES EXPLAINED
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="view-fees" class="view">
+    <div class="welcome-banner">
+      <div class="welcome-date">Your Commission &amp; Fees — Fully Explained</div>
+      <div class="welcome-text">Research shows 45% of sellers say they lack clarity about what their agent's commission actually covers. This page exists to change that completely. No surprises. No ambiguity.</div>
+    </div>
+
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Where Does the Commission Go?</h3></div></div>
+      <div class="card">
+        <div class="chart-wrap" style="height:180px"><canvas id="fees-pie"></canvas></div>
+        <div class="pie-legend" id="fees-legend" style="margin-top:10px"></div>
+      </div>
+    </div>
+
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">What Your Commission Covers — Line by Line</h3></div></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="card" style="padding:14px 16px;border-top:3px solid var(--tan)">
+          <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px;font-family:'Lato',sans-serif">📸 Professional Photography & Listing Prep</div>
+          <div style="font-size:12px;color:#4A4846;line-height:1.7">33 professional photos, MLS listing write-up, property description optimized for search results, and all listing data entry. This alone typically costs $200–$500 if hired separately.</div>
+        </div>
+        <div class="card" style="padding:14px 16px;border-top:3px solid var(--tan)">
+          <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px;font-family:'Lato',sans-serif">🏡 MLS Access & Portal Syndication</div>
+          <div style="font-size:12px;color:#4A4846;line-height:1.7">Access to SABOR / LERA MLS — the only database with real sold prices in Texas. Automatic syndication to Zillow, Redfin, Trulia, Homes.com, Realtor.com, and hundreds of real estate websites. This reach is unavailable to non-licensed sellers.</div>
+        </div>
+        <div class="card" style="padding:14px 16px;border-top:3px solid var(--tan)">
+          <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px;font-family:'Lato',sans-serif">📊 Comparative Market Analysis (CMA)</div>
+          <div style="font-size:12px;color:#4A4846;line-height:1.7">Detailed analysis of real sold comps using MLS data unavailable to algorithms. Protects you from overpricing (which kills listings) or underpricing (which costs you money). Your pricing strategy was built on this foundation.</div>
+        </div>
+        <div class="card" style="padding:14px 16px;border-top:3px solid var(--tan)">
+          <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px;font-family:'Lato',sans-serif">🚶 Showing Coordination & Feedback Management</div>
+          <div style="font-size:12px;color:#4A4846;line-height:1.7">ShowingTime coordination, scheduling management, buyer access and security, post-showing feedback collection and analysis. 6 showings coordinated and logged to date.</div>
+        </div>
+        <div class="card" style="padding:14px 16px;border-top:3px solid var(--tan)">
+          <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px;font-family:'Lato',sans-serif">🤝 Offer Negotiation & Contract Management</div>
+          <div style="font-size:12px;color:#4A4846;line-height:1.7">When an offer arrives, your agent negotiates price, terms, contingencies, closing date, repair requests, and buyer concessions on your behalf. Studies show sellers using agents net 5–10% more than FSBO sellers even after commission.</div>
+        </div>
+        <div class="card" style="padding:14px 16px;border-top:3px solid var(--tan)">
+          <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px;font-family:'Lato',sans-serif">📋 Transaction Coordination (Contract to Close)</div>
+          <div style="font-size:12px;color:#4A4846;line-height:1.7">From accepted offer through closing: managing inspection timelines, title company coordination, lender deadlines, repair negotiations, final walkthrough, and closing disclosure review. This phase typically takes 30–45 days and involves dozens of moving parts.</div>
+        </div>
+        <div class="card" style="padding:14px 16px;border-top:3px solid var(--tan)">
+          <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px;font-family:'Lato',sans-serif">💰 Buyer's Agent Compensation (Offered Concession)</div>
+          <div style="font-size:12px;color:#4A4846;line-height:1.7">Since the 2024 NAR settlement, buyer agent compensation is now negotiable. Offering a buyer agent concession is optional but strategic — most buyers in the $272K range expect their agent to be compensated, and restricting this can reduce the buyer pool.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-section">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Texas Closing Cost Facts</h3></div></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <div style="flex:1;min-width:150px;background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:14px;text-align:center;border-top:3px solid var(--green)">
+          <div style="font-size:22px;font-weight:900;font-family:'Lato',sans-serif;color:var(--green)">$0</div>
+          <div style="font-size:10px;color:var(--midgray);margin-top:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">State Transfer Tax</div>
+          <div style="font-size:11px;color:#6B6966;margin-top:4px">Texas has NO real estate transfer tax</div>
+        </div>
+        <div style="flex:1;min-width:150px;background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:14px;text-align:center;border-top:3px solid var(--tan)">
+          <div style="font-size:22px;font-weight:900;font-family:'Lato',sans-serif;color:#8B6A3A">~$1,200</div>
+          <div style="font-size:10px;color:var(--midgray);margin-top:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Title & Escrow Fees</div>
+          <div style="font-size:11px;color:#6B6966;margin-top:4px">Typical for a $272K sale in Bexar County</div>
+        </div>
+        <div style="flex:1;min-width:150px;background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:14px;text-align:center;border-top:3px solid var(--navy)">
+          <div style="font-size:22px;font-weight:900;font-family:'Lato',sans-serif;color:var(--navy)">Prorated</div>
+          <div style="font-size:10px;color:var(--midgray);margin-top:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Property Taxes</div>
+          <div style="font-size:11px;color:#6B6966;margin-top:4px">You pay your share Jan 1 through close date</div>
+        </div>
+        <div style="flex:1;min-width:150px;background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:14px;text-align:center;border-top:3px solid var(--midgray)">
+          <div style="font-size:22px;font-weight:900;font-family:'Lato',sans-serif;color:var(--midgray)">N/A</div>
+          <div style="font-size:10px;color:var(--midgray);margin-top:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Attorney Requirement</div>
+          <div style="font-size:11px;color:#6B6966;margin-top:4px">Texas does not require a real estate attorney</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="agent-note">
+      <div class="agent-note-lbl">Have Questions About Your Fees?</div>
+      <div class="agent-note-text">Every dollar in your transaction should be fully understood before you sign anything. I'm happy to walk through your exact net sheet, explain any line item, or answer questions about how commission works post-NAR settlement. There are no dumb questions when it's your home and your equity.</div>
+      <div class="agent-sig">
+        <div class="agent-avatar">CW</div>
+        <div><div class="agent-name">Chris Winstead</div><div class="agent-contact">All City Homes · (210) 985-7675 · chris@allcityhomestx.com</div></div>
+      </div>
+    </div>
+  </div>
+
 </div><!-- /content -->
 
 <div id="footer">
@@ -822,10 +1171,184 @@ function renderSitesCharts() {
   });
 }
 
+// ── PROCEEDS CALCULATOR ────────────────────────────
+const COMMISSION = 0.03; // listing agent 3%
+const BUYER_COMM = 0.025; // buyer agent concession typical
+const TITLE_FEES = 1200;
+const PROP_TAX_PRORATE = 1800; // ~$3600/yr prorated ~6 months
+const OTHER = 500; // misc recording etc
+
+function updateProceeds() {
+  const sp = parseInt(document.getElementById('sp-slider').value);
+  const mort = parseInt(document.getElementById('mort-slider').value);
+  const conc = parseInt(document.getElementById('conc-slider').value);
+  document.getElementById('sp-display').textContent = fmt(sp);
+  document.getElementById('mort-display').textContent = fmt(mort);
+  document.getElementById('conc-display').textContent = fmt(conc);
+
+  const listComm = Math.round(sp * COMMISSION);
+  const buyComm = Math.round(sp * BUYER_COMM);
+  const totalCosts = listComm + buyComm + TITLE_FEES + PROP_TAX_PRORATE + conc + OTHER;
+  const net = sp - mort - totalCosts;
+  const pct = ((totalCosts / sp) * 100).toFixed(1);
+
+  const rows = [
+    {label:'Sale Price', val:sp, color:'#102548', bold:true},
+    {label:'− Mortgage Payoff', val:-mort, color:'#A63228'},
+    {label:'− Listing Agent Commission (3%)', val:-listComm, color:'#A63228'},
+    {label:'− Buyer Agent Concession (2.5%)', val:-buyComm, color:'#A63228'},
+    {label:'− Title & Escrow Fees (est.)', val:-TITLE_FEES, color:'#A63228'},
+    {label:'− Prorated Property Taxes (est.)', val:-PROP_TAX_PRORATE, color:'#A63228'},
+    {label:'− Buyer Concession Offered', val:-conc, color:'#A63228'},
+    {label:'− Recording & Misc Fees', val:-OTHER, color:'#A63228'},
+  ];
+
+  document.getElementById('proceeds-breakdown').innerHTML = `
+    <div style="font-size:12px;display:flex;flex-direction:column;gap:0">
+      ${rows.map((r,i) => `
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--offwhite);${i===0?'':''}">
+          <span style="color:${r.bold?'var(--navy)':'#4A4846'};font-weight:${r.bold?700:400}">${r.label}</span>
+          <span style="font-weight:700;font-family:'Lato',sans-serif;color:${r.val>=0?'var(--navy)':'var(--red)'}">${r.val>=0?'':''} ${fmt(Math.abs(r.val))}</span>
+        </div>`).join('')}
+      <div style="display:flex;justify-content:space-between;padding:14px 0 4px;border-top:2px solid var(--navy);margin-top:4px">
+        <span style="font-weight:700;color:var(--navy);font-size:14px;font-family:'Lato',sans-serif">= Estimated Net Proceeds</span>
+        <span style="font-weight:900;font-size:22px;font-family:'Lato',sans-serif;color:${net>0?'var(--green)':'var(--red)'}">${fmt(net)}</span>
+      </div>
+      <div style="font-size:11px;color:var(--midgray);margin-top:4px">Total costs: ${fmt(totalCosts)} (${pct}% of sale price) · Texas has no real estate transfer tax</div>
+    </div>`;
+
+  // Update chart
+  const prices = [250000, 255000, 260000, 265000, 270000, 272000, 275000, 280000, 285000];
+  const nets = prices.map(p => p - mort - Math.round(p*COMMISSION) - Math.round(p*BUYER_COMM) - TITLE_FEES - PROP_TAX_PRORATE - conc - OTHER);
+  destroyChart('proceeds-chart');
+  const ctx = document.getElementById('proceeds-chart').getContext('2d');
+  charts['proceeds-chart'] = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels: prices.map(p=>'$'+(p/1000)+'K'),
+      datasets:[{
+        data: nets,
+        backgroundColor: prices.map(p => p===272000 ? C.tan : C.navy+'99'),
+        borderRadius:4, borderSkipped:false
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>'Net: '+fmt(c.raw)}}},
+      scales:{x:{grid:GRID,ticks:TICK,border:{display:false}},y:{grid:GRID,ticks:{...TICK,callback:v=>'$'+(v/1000).toFixed(0)+'K'},border:{display:false}}}
+    }
+  });
+}
+
+// ── COMPS DATA & RENDER ────────────────────────────
+const COMPS_ACTIVE = [
+  {addr:'14022 Rolling Path', sub:'3 BD / 2 BA / 1,410 sq ft', price:269000, dom:18, psf:190.8, status:'active'},
+  {addr:'14318 Wind Ridge Dr', sub:'3 BD / 2 BA / 1,556 sq ft', price:279900, dom:41, psf:179.9, status:'active'},
+  {addr:'14111 Braun Rd', sub:'3 BD / 2 BA / 1,380 sq ft', price:264500, dom:12, psf:191.7, status:'active'},
+  {addr:'3035 Heidi St ← YOUR HOME', sub:'3 BD / 2 BA / 1,497 sq ft · Greenbelt lot', price:272000, dom:26, psf:181.7, status:'yours'},
+];
+const COMPS_SOLD = [
+  {addr:'14230 Falcon Hollow', sub:'3 BD / 2 BA / 1,488 sq ft', price:268000, dom:34, psf:180.1, status:'sold'},
+  {addr:'3027 Heidi St', sub:'3 BD / 2 BA / 1,506 sq ft', price:261000, dom:47, psf:173.3, status:'sold'},
+  {addr:'14405 Vance Jackson Rd', sub:'3 BD / 2 BA / 1,520 sq ft', price:271500, dom:29, psf:178.6, status:'sold'},
+];
+
+function renderComps() {
+  const allForChart = [...COMPS_ACTIVE.filter(c=>c.status!=='yours'), ...COMPS_SOLD];
+  destroyChart('comps-chart');
+  const ctx = document.getElementById('comps-chart').getContext('2d');
+  const labels = ['14022 Rolling Path\n(Active)','14318 Wind Ridge\n(Active)','14111 Braun Rd\n(Active)','Your Home\n$272K','14230 Falcon Hollow\n(Sold)','3027 Heidi St\n(Sold)','14405 Vance Jackson\n(Sold)'];
+  const prices = [269000,279900,264500,272000,268000,261000,271500];
+  const colors = [C.navy+'99',C.navy+'99',C.navy+'99',C.tan,C.green+'99',C.green+'99',C.green+'99'];
+  charts['comps-chart'] = new Chart(ctx,{type:'bar',data:{labels,datasets:[{data:prices,backgroundColor:colors,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>fmt(c.raw)}}},scales:{x:{grid:GRID,ticks:{...TICK,maxRotation:0},border:{display:false}},y:{grid:GRID,ticks:{...TICK,callback:v=>'$'+(v/1000)+'K'},border:{display:false},min:245000}}}});
+
+  document.getElementById('comps-active').innerHTML = COMPS_ACTIVE.map(c => {
+    const isYours = c.status==='yours';
+    return `<div class="${isYours?'your-home-row':'comp-card'}">
+      <div><div class="comp-addr">${c.addr}</div><div class="comp-sub">${c.sub} · ${c.dom} DOM</div></div>
+      <div><div class="comp-price" style="color:${isYours?'#8B6A3A':'var(--navy)'}">${fmt(c.price)}</div><div class="comp-psf">$${c.psf}/sq ft</div></div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('comps-sold').innerHTML = COMPS_SOLD.map(c =>
+    `<div class="comp-card">
+      <div><div class="comp-addr">${c.addr}</div><div class="comp-sub">${c.sub} · Sold in ${c.dom} days</div></div>
+      <div><div class="comp-price" style="color:var(--green)">${fmt(c.price)}</div><div class="comp-psf">$${c.psf}/sq ft</div></div>
+    </div>`
+  ).join('');
+}
+
+// ── SCENARIO PLANNER ───────────────────────────────
+const SCENARIO_DATA = [
+  {price:245000, label:'$245K', dom_est:14, showings_est:'+60%', net_delta:-19300},
+  {price:255000, label:'$255K', dom_est:22, showings_est:'+35%', net_delta:-10300},
+  {price:265000, label:'$265K', dom_est:32, showings_est:'+12%', net_delta:-6400},
+  {price:272000, label:'$272K ← Current', dom_est:51, showings_est:'Baseline', net_delta:0},
+  {price:279000, label:'$279K', dom_est:67, showings_est:'−15%', net_delta:+4900},
+  {price:285000, label:'$285K', dom_est:85, showings_est:'−30%', net_delta:+8900},
+];
+
+function updateScenario() {
+  const val = parseInt(document.getElementById('sce-slider').value);
+  document.getElementById('sce-display').textContent = fmt(val);
+
+  // Find nearest scenario
+  const nearest = SCENARIO_DATA.reduce((a,b) => Math.abs(b.price-val)<Math.abs(a.price-val)?b:a);
+  const netChange = val - 272000;
+  const estNetProceeds = 97800 + netChange * 0.94; // rough net after costs
+  const domEst = val < 272000 ? Math.max(14, Math.round(51 * (val/272000) * 0.6)) : Math.round(51 * (val/272000) * 1.3);
+  const competScore = val <= 264000 ? 'Highly Competitive' : val <= 272000 ? 'Competitive' : val <= 279000 ? 'Market Rate' : 'Above Market';
+  const scoreColor = val <= 264000 ? C.green : val <= 272000 ? C.tan : val <= 279000 ? C.navy : C.red;
+
+  document.getElementById('sce-kpis').innerHTML = `
+    <div class="kpi" style="border-top-color:${scoreColor}"><div class="kpi-icon">🏷️</div><div class="kpi-val" style="font-size:16px;color:${scoreColor}">${competScore}</div><div class="kpi-lbl">Market Position</div></div>
+    <div class="kpi"><div class="kpi-icon">📅</div><div class="kpi-val">${domEst}</div><div class="kpi-lbl">Est. Days to Offer</div><div class="kpi-sub">At this price point</div></div>
+    <div class="kpi"><div class="kpi-icon">💰</div><div class="kpi-val" style="font-size:16px;color:${netChange>=0?C.green:C.red}">${fmt(Math.round(estNetProceeds))}</div><div class="kpi-lbl">Est. Net Proceeds</div></div>
+    <div class="kpi"><div class="kpi-icon">📊</div><div class="kpi-val" style="font-size:16px;color:${netChange>=0?C.green:C.red}">${netChange>=0?'+':''}${fmt(netChange)}</div><div class="kpi-lbl">vs. Current Price</div></div>`;
+
+  destroyChart('scenario-chart');
+  const ctx = document.getElementById('scenario-chart').getContext('2d');
+  const labels = SCENARIO_DATA.map(s=>s.label);
+  const nets = SCENARIO_DATA.map(s=>Math.round(97800 + (s.price-272000)*0.94));
+  const doms = SCENARIO_DATA.map(s=>s.dom_est);
+  charts['scenario-chart'] = new Chart(ctx,{
+    data:{labels,datasets:[
+      {type:'bar',label:'Est. Net Proceeds',data:nets,backgroundColor:SCENARIO_DATA.map(s=>s.price===272000?C.tan:C.navy+'88'),borderRadius:4,yAxisID:'y',borderSkipped:false},
+      {type:'line',label:'Est. Days to Offer',data:doms,borderColor:C.red,backgroundColor:'transparent',borderWidth:2,pointBackgroundColor:C.red,pointRadius:4,yAxisID:'y2',tension:.3}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#6B6966',font:{size:11}}},tooltip:{...TT}},
+      scales:{
+        x:{grid:GRID,ticks:{...TICK,maxRotation:0},border:{display:false}},
+        y:{grid:GRID,ticks:{...TICK,callback:v=>'$'+(v/1000)+'K'},border:{display:false},position:'left'},
+        y2:{grid:{display:false},ticks:{...TICK,callback:v=>v+' days'},border:{display:false},position:'right'}
+      }
+    }
+  });
+}
+
+// ── FEES PIE ───────────────────────────────────────
+function renderFeesPie() {
+  const sp = 272000;
+  const slices = [
+    {label:'Listing Agent (3%)',val:Math.round(sp*0.03),color:C.navy},
+    {label:'Buyer Agent Concession (2.5%)',val:Math.round(sp*0.025),color:C.tan},
+    {label:'Title & Escrow',val:1200,color:C.blue},
+    {label:'Prorated Taxes',val:1800,color:C.midgray},
+    {label:'Recording & Misc',val:500,color:C.lightgray},
+  ];
+  destroyChart('fees-pie');
+  const ctx = document.getElementById('fees-pie').getContext('2d');
+  charts['fees-pie'] = new Chart(ctx,{type:'doughnut',data:{labels:slices.map(s=>s.label),datasets:[{data:slices.map(s=>s.val),backgroundColor:slices.map(s=>s.color),borderWidth:2,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.label+': '+fmt(c.raw)}}}}});
+  document.getElementById('fees-legend').innerHTML = slices.map(s=>`<div class="pie-legend-item"><div class="pie-dot" style="background:${s.color}"></div>${s.label}: <strong style="color:var(--charcoal);margin-left:2px">${fmt(s.val)}</strong></div>`).join('');
+}
+
 function render() {
   renderKPIs(); renderActivityChart(); renderMarketChart();
   renderPies(); renderLog(); renderSellerTimeline(); renderSellerMarket();
   renderSitesCharts();
+  updateProceeds();
+  renderComps();
+  updateScenario();
+  renderFeesPie();
 }
 render();
 </script>
