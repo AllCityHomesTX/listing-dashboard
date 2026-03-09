@@ -10,489 +10,223 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.8.0/Recharts.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: #071529; color: #fff; font-family: 'DM Sans', system-ui, sans-serif; }
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: #071529; }
-  ::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.35); border-radius: 3px; }
-  button { cursor: pointer; font-family: inherit; }
-  button:hover { opacity: 0.82; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#071529;color:#fff;font-family:'DM Sans',system-ui,sans-serif}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#071529}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.35);border-radius:3px}
+button{cursor:pointer;font-family:inherit}button:hover{opacity:.82}
 </style>
 </head>
 <body>
 <div id="root"></div>
-
 <script type="text/babel">
-const { useState, useMemo } = React;
-const { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid,
-        Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } = Recharts;
-
-/* ── Palette ─────────────────────────────────────── */
-const C = {
-  gold: "#C9A84C", navy: "#0B1F3A", teal: "#1A7A6E",
-  lightGold: "#E8D5A3", dark: "#071529",
-  green: "#2D7A4F", red: "#A63228", blue: "#5599DD"
-};
-
-/* ── Static Data ─────────────────────────────────── */
-const PROP = {
-  address: "3035 Heidi St", city: "San Antonio, TX 78247",
-  price: "$272,000", beds: 3, baths: 2, sqft: 1497,
-  yearBuilt: 1979, subdivision: "Burning Wood / Meadowwood",
-  mls: "1940638", listDate: "Feb 11, 2026",
-  agent: "Chris Winstead", phone: "(210) 985-7675",
-  email: "chris@allcityhomestx.com", status: "ACTIVE",
-  listed: new Date("2026-02-11")
-};
-
-const ALL_SHOWINGS = [
-  { d: new Date("2026-02-15"), date:"Feb 15", time:"4:15–5:00 PM",   agent:"Sarah Dietz",       office:"Keller Williams Heritage",    interest:"Somewhat",      price:"Just Right", comment:"Nice house. Something to think about." },
-  { d: new Date("2026-02-16"), date:"Feb 16", time:"10:30–11:15 AM", agent:"Ijeoma Okafor",      office:"Real Broker, LLC",            interest:"Not Interested",price:"Too High",   comment:"" },
-  { d: new Date("2026-02-16"), date:"Feb 16", time:"4:45–5:45 PM",   agent:"Alison McLaughlin",  office:"eXp Realty",                  interest:"—",             price:"—",          comment:"No feedback received" },
-  { d: new Date("2026-02-23"), date:"Feb 23", time:"9:00–10:00 AM",  agent:"Brooke Smolka",      office:"Coldwell Banker D'Ann Harper",interest:"Not Interested",price:"Just Right", comment:"Clients prefer a bigger kitchen and more space. Showed well and was clean." },
-  { d: new Date("2026-02-27"), date:"Feb 27", time:"11:00–11:30 AM", agent:"Michael Zamora",     office:"Phyllis Browning Company",    interest:"—",             price:"—",          comment:"No feedback received" },
-  { d: new Date("2026-02-28"), date:"Feb 28", time:"9:00–10:00 AM",  agent:"Annie Bathalter",    office:"Suburban Spaces, LLC",        interest:"—",             price:"—",          comment:"No feedback received" },
+const {useState,useMemo}=React;
+const {BarChart,Bar,LineChart,Line,XAxis,YAxis,CartesianGrid,Tooltip,ResponsiveContainer,PieChart,Pie,Cell,Legend}=Recharts;
+const C={gold:"#C9A84C",navy:"#0B1F3A",teal:"#1A7A6E",lightGold:"#E8D5A3",dark:"#071529",green:"#2D7A4F",red:"#A63228",blue:"#5599DD"};
+const PROP={address:"3035 Heidi St",city:"San Antonio, TX 78247",price:"$272,000",beds:3,baths:2,sqft:1497,yearBuilt:1979,subdivision:"Burning Wood / Meadowwood",mls:"1940638",listDate:"Feb 11, 2026",agent:"Chris Winstead",phone:"(210) 985-7675",email:"chris@allcityhomestx.com",status:"ACTIVE",listed:new Date("2026-02-11")};
+const ALL_SHOWINGS=[
+  {d:new Date("2026-02-15"),date:"Feb 15",time:"4:15–5:00 PM",agent:"Sarah Dietz",office:"Keller Williams Heritage",interest:"Somewhat",price:"Just Right",comment:"Nice house. Something to think about."},
+  {d:new Date("2026-02-16"),date:"Feb 16",time:"10:30–11:15 AM",agent:"Ijeoma Okafor",office:"Real Broker, LLC",interest:"Not Interested",price:"Too High",comment:""},
+  {d:new Date("2026-02-16"),date:"Feb 16",time:"4:45–5:45 PM",agent:"Alison McLaughlin",office:"eXp Realty",interest:"—",price:"—",comment:"No feedback received"},
+  {d:new Date("2026-02-23"),date:"Feb 23",time:"9:00–10:00 AM",agent:"Brooke Smolka",office:"Coldwell Banker D'Ann Harper",interest:"Not Interested",price:"Just Right",comment:"Clients prefer a bigger kitchen and more space. Showed well and was clean."},
+  {d:new Date("2026-02-27"),date:"Feb 27",time:"11:00–11:30 AM",agent:"Michael Zamora",office:"Phyllis Browning Company",interest:"—",price:"—",comment:"No feedback received"},
+  {d:new Date("2026-02-28"),date:"Feb 28",time:"9:00–10:00 AM",agent:"Annie Bathalter",office:"Suburban Spaces, LLC",interest:"—",price:"—",comment:"No feedback received"},
 ];
-
-const ALL_WEEKLY = [
-  { week:"Feb 11", ws:new Date("2026-02-11"), showings:0, emails:30,  interested:0 },
-  { week:"Feb 15", ws:new Date("2026-02-15"), showings:3, emails:72,  interested:2 },
-  { week:"Feb 22", ws:new Date("2026-02-22"), showings:3, emails:54,  interested:2 },
-  { week:"Mar 1",  ws:new Date("2026-03-01"), showings:0, emails:22,  interested:0 },
-  { week:"Mar 9",  ws:new Date("2026-03-09"), showings:0, emails:8,   interested:0 },
+const ALL_WEEKLY=[
+  {week:"Feb 11",ws:new Date("2026-02-11"),showings:0,emails:30,interested:0},
+  {week:"Feb 15",ws:new Date("2026-02-15"),showings:3,emails:72,interested:2},
+  {week:"Feb 22",ws:new Date("2026-02-22"),showings:3,emails:54,interested:2},
+  {week:"Mar 1",ws:new Date("2026-03-01"),showings:0,emails:22,interested:0},
+  {week:"Mar 9",ws:new Date("2026-03-09"),showings:0,emails:8,interested:0},
 ];
-
-const MKT = {
-  "6m":[
-    {p:"Sep 2025",nb:290000,mls:344200},{p:"Nov 2025",nb:286000,mls:345100},
-    {p:"Jan 2026",nb:284500,mls:345700},{p:"Feb 2026",nb:283688,mls:346046},
-  ],
-  "1y":[
-    {p:"Aug 2025",nb:291000,mls:344000},{p:"Oct 2025",nb:287500,mls:345000},
-    {p:"Dec 2025",nb:285000,mls:345500},{p:"Feb 2026",nb:283688,mls:346046},
-  ],
-  "3y":[
-    {p:"Feb 2024",nb:320442,mls:340397},
-    {p:"Feb 2025",nb:302567,mls:343935},
-    {p:"Feb 2026",nb:283688,mls:346046},
-  ],
+const MKT={
+  "6m":[{p:"Sep 2025",nb:290000,mls:344200},{p:"Nov 2025",nb:286000,mls:345100},{p:"Jan 2026",nb:284500,mls:345700},{p:"Feb 2026",nb:283688,mls:346046}],
+  "1y":[{p:"Aug 2025",nb:291000,mls:344000},{p:"Oct 2025",nb:287500,mls:345000},{p:"Dec 2025",nb:285000,mls:345500},{p:"Feb 2026",nb:283688,mls:346046}],
+  "3y":[{p:"Feb 2024",nb:320442,mls:340397},{p:"Feb 2025",nb:302567,mls:343935},{p:"Feb 2026",nb:283688,mls:346046}],
 };
-
-const TODAY = new Date("2026-03-09");
-const fmt$ = v => `$${Number(v).toLocaleString()}`;
-
-function filterS(arr, days) {
-  if (days === "all") return arr;
-  const cut = new Date(TODAY); cut.setDate(cut.getDate() - days);
-  return arr.filter(x => x.d >= cut);
-}
-function filterW(arr, days) {
-  if (days === "all") return arr;
-  const cut = new Date(TODAY); cut.setDate(cut.getDate() - days);
-  return arr.filter(x => x.ws >= cut);
-}
-function dom(days) {
-  const max = Math.floor((TODAY - PROP.listed) / 86400000);
-  return days === "all" ? max : Math.min(days, max);
-}
-
-/* ── Shared UI ───────────────────────────────────── */
-function Toggle({ value, onChange, opts }) {
-  return (
-    <div style={{display:"inline-flex",background:"rgba(255,255,255,0.05)",borderRadius:8,padding:3,gap:2}}>
-      {opts.map(o => (
-        <button key={o.v} onClick={()=>onChange(o.v)} style={{
-          background: value===o.v ? C.gold : "transparent",
-          color: value===o.v ? C.dark : "#7788AA",
-          border:"none", padding:"5px 12px", borderRadius:6,
-          fontSize:11, fontWeight:700, letterSpacing:0.4, transition:"all .15s", whiteSpace:"nowrap"
-        }}>{o.l}</button>
-      ))}
-    </div>
-  );
-}
-
-const S_OPTS  = [{v:7,l:"7D"},{v:30,l:"30D"},{v:"all",l:"All Time"}];
-const M_OPTS  = [{v:"6m",l:"6 Mo"},{v:"1y",l:"1 Yr"},{v:"3y",l:"3 Yr"}];
-const EM_OPTS = [{v:7,l:"Last 7 Days"},{v:"all",l:"Since Listing"}];
-const CH_OPTS = [{v:"showings",l:"Showings"},{v:"emails",l:"Email Reach"},{v:"interested",l:"Interested"}];
-
-function Badge({label, color}) {
-  return <span style={{background:color+"22",color,border:`1px solid ${color}44`,borderRadius:4,padding:"2px 9px",fontSize:11,fontWeight:700,letterSpacing:.8,textTransform:"uppercase"}}>{label}</span>;
-}
-
-function KPI({icon, label, value, sub, color}) {
-  return (
-    <div style={{background:"rgba(255,255,255,0.04)",border:"1px solid rgba(201,168,76,0.14)",borderRadius:12,padding:"15px 17px",flex:1,minWidth:110}}>
-      <div style={{fontSize:20,marginBottom:3}}>{icon}</div>
-      <div style={{fontSize:24,fontWeight:800,color:color||C.gold,fontFamily:"'Playfair Display',serif",lineHeight:1}}>{value}</div>
-      <div style={{fontSize:11,color:"#8899AA",marginTop:4,fontWeight:600,letterSpacing:.4}}>{label}</div>
-      {sub && <div style={{fontSize:11,color:"#55667A",marginTop:2}}>{sub}</div>}
-    </div>
-  );
-}
-
-function Sec({title, right}) {
-  return (
-    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12,flexWrap:"wrap",gap:8}}>
-      <div style={{display:"flex",alignItems:"center",gap:8}}>
-        <div style={{width:3,height:15,background:C.gold,borderRadius:2}}/>
-        <h3 style={{margin:0,fontSize:11,fontWeight:700,letterSpacing:2,textTransform:"uppercase",color:"#8899BB"}}>{title}</h3>
-      </div>
-      {right}
-    </div>
-  );
-}
-
-function Card({children}) {
-  return <div style={{background:"rgba(255,255,255,0.03)",borderRadius:12,padding:"15px 13px",border:"1px solid rgba(255,255,255,0.06)"}}>{children}</div>;
-}
-
-function Chip({type, title, body}) {
-  const clr = {warning:C.gold, positive:C.green, flag:C.red};
-  const ico  = {warning:"⚡", positive:"✅", flag:"🚩"};
-  return (
-    <div style={{background:`${clr[type]}11`,border:`1px solid ${clr[type]}33`,borderRadius:10,padding:"11px 13px",marginBottom:8}}>
-      <div style={{display:"flex",gap:8}}>
-        <span style={{fontSize:13}}>{ico[type]}</span>
-        <div>
-          <div style={{fontSize:12,fontWeight:700,color:clr[type],marginBottom:2}}>{title}</div>
-          <div style={{fontSize:11,color:"#99AABB",lineHeight:1.6}}>{body}</div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const TT = {background:C.dark,border:`1px solid ${C.gold}44`,borderRadius:8,color:"#fff",fontSize:12};
-const Empty = ({msg}) => <div style={{textAlign:"center",color:"#445566",padding:"32px 0",fontSize:12}}>{msg}</div>;
-
-/* ── Agent View ──────────────────────────────────── */
-function AgentView() {
-  const [sr, setSr] = useState("all");
-  const [mr, setMr] = useState("3y");
-  const [er, setEr] = useState("all");
-  const [ch, setCh] = useState("showings");
-
-  const shows  = useMemo(()=>filterS(ALL_SHOWINGS,sr),[sr]);
-  const weekly = useMemo(()=>filterW(ALL_WEEKLY,sr),[sr]);
-  const mktD   = MKT[mr];
-  const days   = dom(sr);
-
-  const eR=er===7?22:186, eI=er===7?1:4, eM=er===7?1:2, eN=er===7?1:6;
-
-  const intD = [{name:"Interested",value:eI,color:C.green},{name:"Maybe",value:eM,color:C.gold},{name:"Not Interested",value:eN,color:C.red}];
-  const prcD = [{name:"Just Right",value:sr===7?0:2,color:C.green},{name:"Too High",value:sr===7?1:1,color:C.red}];
-  const barC = ch==="showings"?C.gold:ch==="emails"?C.blue:C.green;
-  const hasFB = s => s.comment && s.comment!=="No feedback received" && s.comment!=="";
-
-  return (
+const TODAY=new Date("2026-03-09");
+const fmt$=v=>`$${Number(v).toLocaleString()}`;
+function filterS(arr,days){if(days==="all")return arr;const cut=new Date(TODAY);cut.setDate(cut.getDate()-days);return arr.filter(x=>x.d>=cut);}
+function filterW(arr,days){if(days==="all")return arr;const cut=new Date(TODAY);cut.setDate(cut.getDate()-days);return arr.filter(x=>x.ws>=cut);}
+function dom(days){const max=Math.floor((TODAY-PROP.listed)/86400000);return days==="all"?max:Math.min(days,max);}
+function Toggle({value,onChange,opts}){return(<div style={{display:"inline-flex",background:"rgba(255,255,255,0.05)",borderRadius:8,padding:3,gap:2}}>{opts.map(o=>(<button key={o.v} onClick={()=>onChange(o.v)} style={{background:value===o.v?C.gold:"transparent",color:value===o.v?C.dark:"#7788AA",border:"none",padding:"5px 12px",borderRadius:6,fontSize:11,fontWeight:700,letterSpacing:0.4,transition:"all .15s",whiteSpace:"nowrap"}}>{o.l}</button>))}</div>);}
+const S_OPTS=[{v:7,l:"7D"},{v:30,l:"30D"},{v:"all",l:"All Time"}];
+const M_OPTS=[{v:"6m",l:"6 Mo"},{v:"1y",l:"1 Yr"},{v:"3y",l:"3 Yr"}];
+const EM_OPTS=[{v:7,l:"Last 7 Days"},{v:"all",l:"Since Listing"}];
+const CH_OPTS=[{v:"showings",l:"Showings"},{v:"emails",l:"Email Reach"},{v:"interested",l:"Interested"}];
+function Badge({label,color}){return <span style={{background:color+"22",color,border:`1px solid ${color}44`,borderRadius:4,padding:"2px 9px",fontSize:11,fontWeight:700,letterSpacing:.8,textTransform:"uppercase"}}>{label}</span>;}
+function KPI({icon,label,value,sub,color}){return(<div style={{background:"rgba(255,255,255,0.04)",border:"1px solid rgba(201,168,76,0.14)",borderRadius:12,padding:"15px 17px",flex:1,minWidth:110}}><div style={{fontSize:20,marginBottom:3}}>{icon}</div><div style={{fontSize:24,fontWeight:800,color:color||C.gold,fontFamily:"'Playfair Display',serif",lineHeight:1}}>{value}</div><div style={{fontSize:11,color:"#8899AA",marginTop:4,fontWeight:600,letterSpacing:.4}}>{label}</div>{sub&&<div style={{fontSize:11,color:"#55667A",marginTop:2}}>{sub}</div>}</div>);}
+function Sec({title,right}){return(<div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12,flexWrap:"wrap",gap:8}}><div style={{display:"flex",alignItems:"center",gap:8}}><div style={{width:3,height:15,background:C.gold,borderRadius:2}}/><h3 style={{margin:0,fontSize:11,fontWeight:700,letterSpacing:2,textTransform:"uppercase",color:"#8899BB"}}>{title}</h3></div>{right}</div>);}
+function Card({children}){return <div style={{background:"rgba(255,255,255,0.03)",borderRadius:12,padding:"15px 13px",border:"1px solid rgba(255,255,255,0.06)"}}>{children}</div>;}
+function Chip({type,title,body}){const clr={warning:C.gold,positive:C.green,flag:C.red};const ico={warning:"⚡",positive:"✅",flag:"🚩"};return(<div style={{background:`${clr[type]}11`,border:`1px solid ${clr[type]}33`,borderRadius:10,padding:"11px 13px",marginBottom:8}}><div style={{display:"flex",gap:8}}><span style={{fontSize:13}}>{ico[type]}</span><div><div style={{fontSize:12,fontWeight:700,color:clr[type],marginBottom:2}}>{title}</div><div style={{fontSize:11,color:"#99AABB",lineHeight:1.6}}>{body}</div></div></div></div>);}
+const TT={background:C.dark,border:`1px solid ${C.gold}44`,borderRadius:8,color:"#fff",fontSize:12};
+const Empty=({msg})=><div style={{textAlign:"center",color:"#445566",padding:"32px 0",fontSize:12}}>{msg}</div>;
+function AgentView(){
+  const [sr,setSr]=useState("all");
+  const [mr,setMr]=useState("3y");
+  const [er,setEr]=useState("all");
+  const [ch,setCh]=useState("showings");
+  const shows=useMemo(()=>filterS(ALL_SHOWINGS,sr),[sr]);
+  const weekly=useMemo(()=>filterW(ALL_WEEKLY,sr),[sr]);
+  const mktD=MKT[mr];
+  const days=dom(sr);
+  const eR=er===7?22:186,eI=er===7?1:4,eM=er===7?1:2,eN=er===7?1:6;
+  const intD=[{name:"Interested",value:eI,color:C.green},{name:"Maybe",value:eM,color:C.gold},{name:"Not Interested",value:eN,color:C.red}];
+  const prcD=[{name:"Just Right",value:sr===7?0:2,color:C.green},{name:"Too High",value:sr===7?1:1,color:C.red}];
+  const barC=ch==="showings"?C.gold:ch==="emails"?C.blue:C.green;
+  const hasFB=s=>s.comment&&s.comment!=="No feedback received"&&s.comment!=="";
+  return(
     <div>
-      {/* KPIs */}
       <div style={{display:"flex",gap:9,marginBottom:20,flexWrap:"wrap"}}>
-        <KPI icon="🏠" label="List Price"     value="$272K"      sub="$181.69 / sq ft"          color={C.gold}      />
-        <KPI icon="📅" label="Days on Market" value={days}       sub={`Listed ${PROP.listDate}`} color={C.blue}      />
-        <KPI icon="🚶" label="Showings"       value={shows.length} sub={`${shows.filter(hasFB).length} with feedback`} color={C.teal} />
-        <KPI icon="📧" label="Email Reach"    value={eR}         sub={`${eI} marked Interested`} color={C.lightGold} />
-        <KPI icon="🔔" label="Last Showing"   value="Feb 28"     sub="9 days ago"               color="#AA6688"     />
+        <KPI icon="🏠" label="List Price" value="$272K" sub="$181.69 / sq ft" color={C.gold}/>
+        <KPI icon="📅" label="Days on Market" value={days} sub={`Listed ${PROP.listDate}`} color={C.blue}/>
+        <KPI icon="🚶" label="Showings" value={shows.length} sub={`${shows.filter(hasFB).length} with feedback`} color={C.teal}/>
+        <KPI icon="📧" label="Email Reach" value={eR} sub={`${eI} marked Interested`} color={C.lightGold}/>
+        <KPI icon="🔔" label="Last Showing" value="Feb 28" sub="9 days ago" color="#AA6688"/>
       </div>
-
-      {/* AI Insights */}
       <div style={{marginBottom:22}}>
-        <Sec title="AI Insights — Agent Advisory" />
-        <Chip type="warning"  title="Showing Momentum Has Stalled"         body="All 6 showings occurred in the first 17 days (Feb 15–28). Zero showings in the last 9 days is an early sign of listing fatigue. A renewed marketing push and proactive seller conversation is recommended now." />
-        <Chip type="flag"     title="Price Perception Signal"               body="1 of 3 buyers rated the price 'Too High.' Combined with 0 offers at 26 DOM, a pricing strategy conversation is warranted before the listing loses further momentum." />
-        <Chip type="positive" title="Condition Is Not the Issue"            body="Buyers consistently note the home 'showed well and was clean.' Objections center on kitchen size and square footage — structural factors, not fixable through staging." />
-        <Chip type="warning"  title="Neighborhood Pricing Trend Declining"  body="Burning Wood avg has dropped from $320K (2024) to $283K (2026) — an 11.5% decline — while the MLS overall rose 1.7%. At $272K this listing is priced competitively below the declining neighborhood average." />
+        <Sec title="AI Insights — Agent Advisory"/>
+        <Chip type="warning" title="Showing Momentum Has Stalled" body="All 6 showings occurred in the first 17 days (Feb 15–28). Zero showings in the last 9 days is an early sign of listing fatigue. A renewed marketing push and proactive seller conversation is recommended now."/>
+        <Chip type="flag" title="Price Perception Signal" body="1 of 3 buyers rated the price 'Too High.' Combined with 0 offers at 26 DOM, a pricing strategy conversation is warranted before the listing loses further momentum."/>
+        <Chip type="positive" title="Condition Is Not the Issue" body="Buyers consistently note the home 'showed well and was clean.' Objections center on kitchen size and square footage — structural factors, not fixable through staging."/>
+        <Chip type="warning" title="Neighborhood Pricing Trend Declining" body="Burning Wood avg has dropped from $320K (2024) to $283K (2026) — an 11.5% decline — while the MLS overall rose 1.7%. At $272K this listing is priced competitively below the declining neighborhood average."/>
       </div>
-
-      {/* Showing Activity Chart */}
       <div style={{marginBottom:22}}>
-        <Sec title="Showing Activity" right={
-          <div style={{display:"flex",gap:7,flexWrap:"wrap"}}>
-            <Toggle value={ch} onChange={setCh} opts={CH_OPTS}/>
-            <Toggle value={sr} onChange={setSr} opts={S_OPTS}/>
-          </div>
-        }/>
-        <Card>
-          {weekly.length===0 ? <Empty msg="No data in this range."/> :
-            <ResponsiveContainer width="100%" height={175}>
-              <BarChart data={weekly} barSize={32}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)"/>
-                <XAxis dataKey="week"  tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/>
-                <YAxis tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false} allowDecimals={false}/>
-                <Tooltip contentStyle={TT}/>
-                <Bar dataKey={ch} name={ch.charAt(0).toUpperCase()+ch.slice(1)} fill={barC} radius={[5,5,0,0]}/>
-              </BarChart>
-            </ResponsiveContainer>
-          }
-        </Card>
+        <Sec title="Showing Activity" right={<div style={{display:"flex",gap:7,flexWrap:"wrap"}}><Toggle value={ch} onChange={setCh} opts={CH_OPTS}/><Toggle value={sr} onChange={setSr} opts={S_OPTS}/></div>}/>
+        <Card>{weekly.length===0?<Empty msg="No data in this range."/>:<ResponsiveContainer width="100%" height={175}><BarChart data={weekly} barSize={32}><CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)"/><XAxis dataKey="week" tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/><YAxis tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false} allowDecimals={false}/><Tooltip contentStyle={TT}/><Bar dataKey={ch} name={ch.charAt(0).toUpperCase()+ch.slice(1)} fill={barC} radius={[5,5,0,0]}/></BarChart></ResponsiveContainer>}</Card>
       </div>
-
-      {/* Market Comparison */}
       <div style={{marginBottom:22}}>
         <Sec title="Market Comparison — Avg Sales Price (3BR/2BA)" right={<Toggle value={mr} onChange={setMr} opts={M_OPTS}/>}/>
         <Card>
-          <ResponsiveContainer width="100%" height={195}>
-            <LineChart data={mktD}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)"/>
-              <XAxis dataKey="p"  tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/>
-              <YAxis tickFormatter={v=>`$${(v/1000).toFixed(0)}K`} tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/>
-              <Tooltip formatter={v=>fmt$(v)} contentStyle={TT}/>
-              <Legend wrapperStyle={{color:"#8899BB",fontSize:11}}/>
-              <Line type="monotone" dataKey="nb"  name="Burning Wood Avg" stroke={C.gold} strokeWidth={2.5} dot={{fill:C.gold,r:4}}/>
-              <Line type="monotone" dataKey="mls" name="MLS Overall Avg"  stroke={C.teal} strokeWidth={2.5} dot={{fill:C.teal,r:4}} strokeDasharray="5 4"/>
-            </LineChart>
-          </ResponsiveContainer>
-          <div style={{marginTop:10,padding:"9px 13px",background:"rgba(201,168,76,0.07)",borderRadius:8,fontSize:11,color:"#8899AA"}}>
-            <strong style={{color:C.gold}}>Takeaway:</strong> At $272,000 this listing is priced <strong style={{color:"#fff"}}>$11,688 below</strong> the current Burning Wood avg of $283,688.
-          </div>
+          <ResponsiveContainer width="100%" height={195}><LineChart data={mktD}><CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)"/><XAxis dataKey="p" tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/><YAxis tickFormatter={v=>`$${(v/1000).toFixed(0)}K`} tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/><Tooltip formatter={v=>fmt$(v)} contentStyle={TT}/><Legend wrapperStyle={{color:"#8899BB",fontSize:11}}/><Line type="monotone" dataKey="nb" name="Burning Wood Avg" stroke={C.gold} strokeWidth={2.5} dot={{fill:C.gold,r:4}}/><Line type="monotone" dataKey="mls" name="MLS Overall Avg" stroke={C.teal} strokeWidth={2.5} dot={{fill:C.teal,r:4}} strokeDasharray="5 4"/></LineChart></ResponsiveContainer>
+          <div style={{marginTop:10,padding:"9px 13px",background:"rgba(201,168,76,0.07)",borderRadius:8,fontSize:11,color:"#8899AA"}}><strong style={{color:C.gold}}>Takeaway:</strong> At $272,000 this listing is priced <strong style={{color:"#fff"}}>$11,688 below</strong> the current Burning Wood avg of $283,688.</div>
         </Card>
       </div>
-
-      {/* Buyer Feedback */}
       <div style={{marginBottom:22}}>
         <Sec title="Buyer Feedback" right={<Toggle value={er} onChange={setEr} opts={EM_OPTS}/>}/>
         <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-          {[
-            {title:"BUYER INTEREST (MLS emails)", data:intD},
-            {title:"PRICE OPINION (showings)",    data:prcD},
-          ].map((panel,pi)=>(
+          {[{title:"BUYER INTEREST (MLS emails)",data:intD},{title:"PRICE OPINION (showings)",data:prcD}].map((panel,pi)=>(
             <div key={pi} style={{flex:1,minWidth:190,background:"rgba(255,255,255,0.03)",borderRadius:12,padding:16,border:"1px solid rgba(255,255,255,0.06)"}}>
               <div style={{fontSize:10,color:"#8899AA",marginBottom:9,fontWeight:700,letterSpacing:.8}}>{panel.title}</div>
-              <ResponsiveContainer width="100%" height={125}>
-                <PieChart>
-                  <Pie data={panel.data} cx="50%" cy="50%" innerRadius={34} outerRadius={50} dataKey="value" paddingAngle={3}>
-                    {panel.data.map((e,i)=><Cell key={i} fill={e.color}/>)}
-                  </Pie>
-                  <Tooltip contentStyle={TT}/>
-                </PieChart>
-              </ResponsiveContainer>
-              <div style={{display:"flex",gap:7,justifyContent:"center",flexWrap:"wrap",marginTop:5}}>
-                {panel.data.map((e,i)=>(
-                  <div key={i} style={{display:"flex",alignItems:"center",gap:3,fontSize:10}}>
-                    <div style={{width:6,height:6,borderRadius:"50%",background:e.color}}/>
-                    <span style={{color:"#8899AA"}}>{e.name}: <strong style={{color:"#fff"}}>{e.value}</strong></span>
-                  </div>
-                ))}
-              </div>
+              <ResponsiveContainer width="100%" height={125}><PieChart><Pie data={panel.data} cx="50%" cy="50%" innerRadius={34} outerRadius={50} dataKey="value" paddingAngle={3}>{panel.data.map((e,i)=><Cell key={i} fill={e.color}/>)}</Pie><Tooltip contentStyle={TT}/></PieChart></ResponsiveContainer>
+              <div style={{display:"flex",gap:7,justifyContent:"center",flexWrap:"wrap",marginTop:5}}>{panel.data.map((e,i)=>(<div key={i} style={{display:"flex",alignItems:"center",gap:3,fontSize:10}}><div style={{width:6,height:6,borderRadius:"50%",background:e.color}}/><span style={{color:"#8899AA"}}>{e.name}: <strong style={{color:"#fff"}}>{e.value}</strong></span></div>))}</div>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Showing Log */}
       <div>
         <Sec title={`Showing Log (${shows.length} of ${ALL_SHOWINGS.length})`} right={<Toggle value={sr} onChange={setSr} opts={S_OPTS}/>}/>
-        {shows.length===0
-          ? <Card><Empty msg={`No showings in the last ${sr} days.`}/></Card>
-          : <div style={{display:"flex",flexDirection:"column",gap:8}}>
-              {shows.map((s,i)=>(
-                <div key={i} style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"12px 14px"}}>
-                  <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:7}}>
-                    <div>
-                      <span style={{fontWeight:700,color:"#fff",fontSize:13}}>{s.agent}</span>
-                      <span style={{color:"#55669A",fontSize:11,marginLeft:8}}>{s.office}</span>
-                    </div>
-                    <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
-                      <Badge label={s.interest} color={s.interest==="Not Interested"?C.red:s.interest==="Somewhat"?C.gold:s.interest==="—"?"#4466AA":C.green}/>
-                      {s.price!=="—" && <Badge label={s.price==="Just Right"?"✓ Price OK":"↑ Price High"} color={s.price==="Just Right"?C.teal:C.red}/>}
-                    </div>
-                  </div>
-                  <div style={{fontSize:11,color:"#55669A",marginTop:3}}>{s.date} · {s.time}</div>
-                  {hasFB(s) && <div style={{marginTop:7,fontSize:12,color:"#8899BB",fontStyle:"italic",borderLeft:`2px solid ${C.gold}44`,paddingLeft:9}}>"{s.comment}"</div>}
-                  {!hasFB(s) && <div style={{marginTop:4,fontSize:11,color:"#445566"}}>No feedback received</div>}
+        {shows.length===0?<Card><Empty msg={`No showings in the last ${sr} days.`}/></Card>:
+          <div style={{display:"flex",flexDirection:"column",gap:8}}>
+            {shows.map((s,i)=>(
+              <div key={i} style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"12px 14px"}}>
+                <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:7}}>
+                  <div><span style={{fontWeight:700,color:"#fff",fontSize:13}}>{s.agent}</span><span style={{color:"#55669A",fontSize:11,marginLeft:8}}>{s.office}</span></div>
+                  <div style={{display:"flex",gap:5,flexWrap:"wrap"}}><Badge label={s.interest} color={s.interest==="Not Interested"?C.red:s.interest==="Somewhat"?C.gold:s.interest==="—"?"#4466AA":C.green}/>{s.price!=="—"&&<Badge label={s.price==="Just Right"?"✓ Price OK":"↑ Price High"} color={s.price==="Just Right"?C.teal:C.red}/>}</div>
                 </div>
-              ))}
-            </div>
+                <div style={{fontSize:11,color:"#55669A",marginTop:3}}>{s.date} · {s.time}</div>
+                {hasFB(s)&&<div style={{marginTop:7,fontSize:12,color:"#8899BB",fontStyle:"italic",borderLeft:`2px solid ${C.gold}44`,paddingLeft:9}}>"{s.comment}"</div>}
+                {!hasFB(s)&&<div style={{marginTop:4,fontSize:11,color:"#445566"}}>No feedback received</div>}
+              </div>
+            ))}
+          </div>
         }
       </div>
     </div>
   );
 }
-
-/* ── Seller View ─────────────────────────────────── */
-function SellerView() {
-  const [sr, setSr] = useState("all");
-  const [mr, setMr] = useState("3y");
-
-  const shows  = useMemo(()=>filterS(ALL_SHOWINGS,sr),[sr]);
-  const weekly = useMemo(()=>filterW(ALL_WEEKLY,sr),[sr]);
-  const mktD   = MKT[mr];
-  const days   = dom(sr);
-
-  return (
+function SellerView(){
+  const [sr,setSr]=useState("all");
+  const [mr,setMr]=useState("3y");
+  const shows=useMemo(()=>filterS(ALL_SHOWINGS,sr),[sr]);
+  const weekly=useMemo(()=>filterW(ALL_WEEKLY,sr),[sr]);
+  const mktD=MKT[mr];
+  const days=dom(sr);
+  return(
     <div>
-      {/* Welcome Banner */}
       <div style={{background:"linear-gradient(135deg,rgba(201,168,76,0.11),rgba(26,122,110,0.07))",border:"1px solid rgba(201,168,76,0.18)",borderRadius:13,padding:"17px 20px",marginBottom:20}}>
         <div style={{fontSize:11,color:C.gold,fontWeight:700,letterSpacing:.8,marginBottom:5}}>YOUR LISTING UPDATE · MARCH 9, 2026</div>
-        <div style={{fontSize:13,color:"#BBCCDD",lineHeight:1.7}}>
-          Your home has been on the market for <strong style={{color:"#fff"}}>{days} days</strong> and has received <strong style={{color:"#fff"}}>{shows.length} showings</strong> from qualified buyers. Chris Winstead is actively marketing your property and monitoring all activity on your behalf.
-        </div>
+        <div style={{fontSize:13,color:"#BBCCDD",lineHeight:1.7}}>Your home has been on the market for <strong style={{color:"#fff"}}>{days} days</strong> and has received <strong style={{color:"#fff"}}>{shows.length} showings</strong> from qualified buyers. Chris Winstead is actively marketing your property and monitoring all activity on your behalf.</div>
       </div>
-
-      {/* Seller KPIs */}
       <div style={{display:"flex",gap:9,marginBottom:20,flexWrap:"wrap"}}>
-        <KPI icon="🏡" label="Your List Price"  value="$272K"        sub="Competitive in your area"    color={C.gold}      />
-        <KPI icon="🚶" label="Buyers Toured"    value={shows.length} sub={`Since ${PROP.listDate}`}    color={C.teal}      />
-        <KPI icon="📬" label="Buyers Notified"  value="186"          sub="Via MLS email alerts"        color={C.blue}      />
-        <KPI icon="⭐" label="Avg Buyer Rating" value="3.5/5"        sub="Based on 3 responses"        color={C.lightGold} />
+        <KPI icon="🏡" label="Your List Price" value="$272K" sub="Competitive in your area" color={C.gold}/>
+        <KPI icon="🚶" label="Buyers Toured" value={shows.length} sub={`Since ${PROP.listDate}`} color={C.teal}/>
+        <KPI icon="📬" label="Buyers Notified" value="186" sub="Via MLS email alerts" color={C.blue}/>
+        <KPI icon="⭐" label="Avg Buyer Rating" value="3.5/5" sub="Based on 3 responses" color={C.lightGold}/>
       </div>
-
-      {/* Showing Timeline */}
       <div style={{marginBottom:22}}>
         <Sec title="Your Showing Timeline" right={<Toggle value={sr} onChange={setSr} opts={S_OPTS}/>}/>
-        <Card>
-          {weekly.length===0 ? <Empty msg="No showings in this range."/> :
-            <ResponsiveContainer width="100%" height={155}>
-              <BarChart data={weekly} barSize={30}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)"/>
-                <XAxis dataKey="week" tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/>
-                <YAxis tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false} allowDecimals={false}/>
-                <Tooltip contentStyle={TT}/>
-                <Bar dataKey="showings" name="Showings" fill={C.teal} radius={[5,5,0,0]}/>
-              </BarChart>
-            </ResponsiveContainer>
-          }
-        </Card>
+        <Card>{weekly.length===0?<Empty msg="No showings in this range."/>:<ResponsiveContainer width="100%" height={155}><BarChart data={weekly} barSize={30}><CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)"/><XAxis dataKey="week" tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/><YAxis tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false} allowDecimals={false}/><Tooltip contentStyle={TT}/><Bar dataKey="showings" name="Showings" fill={C.teal} radius={[5,5,0,0]}/></BarChart></ResponsiveContainer>}</Card>
       </div>
-
-      {/* Price Comparison */}
       <div style={{marginBottom:22}}>
         <Sec title="How Your Price Compares" right={<Toggle value={mr} onChange={setMr} opts={M_OPTS}/>}/>
         <Card>
           <div style={{display:"flex",gap:9,marginBottom:13,flexWrap:"wrap"}}>
-            {[
-              {label:"Your List Price",  value:"$272,000", color:C.gold},
-              {label:"Neighborhood Avg", value:"$283,688", color:C.blue},
-              {label:"MLS Overall Avg",  value:"$346,046", color:C.teal},
-            ].map((item,i)=>(
-              <div key={i} style={{flex:1,minWidth:115,background:`${item.color}11`,border:`1px solid ${item.color}33`,borderRadius:10,padding:"10px 12px",textAlign:"center"}}>
-                <div style={{fontSize:17,fontWeight:800,color:item.color,fontFamily:"'Playfair Display',serif"}}>{item.value}</div>
-                <div style={{fontSize:10,color:"#7788AA",marginTop:3,fontWeight:600}}>{item.label}</div>
-              </div>
+            {[{label:"Your List Price",value:"$272,000",color:C.gold},{label:"Neighborhood Avg",value:"$283,688",color:C.blue},{label:"MLS Overall Avg",value:"$346,046",color:C.teal}].map((item,i)=>(
+              <div key={i} style={{flex:1,minWidth:115,background:`${item.color}11`,border:`1px solid ${item.color}33`,borderRadius:10,padding:"10px 12px",textAlign:"center"}}><div style={{fontSize:17,fontWeight:800,color:item.color,fontFamily:"'Playfair Display',serif"}}>{item.value}</div><div style={{fontSize:10,color:"#7788AA",marginTop:3,fontWeight:600}}>{item.label}</div></div>
             ))}
           </div>
-          <ResponsiveContainer width="100%" height={160}>
-            <LineChart data={mktD}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)"/>
-              <XAxis dataKey="p"  tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/>
-              <YAxis tickFormatter={v=>`$${(v/1000).toFixed(0)}K`} tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/>
-              <Tooltip formatter={v=>fmt$(v)} contentStyle={TT}/>
-              <Legend wrapperStyle={{color:"#8899BB",fontSize:11}}/>
-              <Line type="monotone" dataKey="nb"  name="Burning Wood Avg" stroke={C.gold} strokeWidth={2.5} dot={{fill:C.gold,r:4}}/>
-              <Line type="monotone" dataKey="mls" name="MLS Overall Avg"  stroke={C.teal} strokeWidth={2.5} dot={{fill:C.teal,r:4}} strokeDasharray="5 4"/>
-            </LineChart>
-          </ResponsiveContainer>
-          <div style={{marginTop:9,padding:"9px 13px",background:"rgba(45,122,79,0.09)",borderRadius:8,fontSize:11,color:"#AABBCC",lineHeight:1.6}}>
-            ✅ <strong style={{color:"#fff"}}>Your home is priced</strong> <strong style={{color:C.gold}}>$11,688 below</strong> the average sold home in your neighborhood — one of the most competitive options for buyers right now.
-          </div>
+          <ResponsiveContainer width="100%" height={160}><LineChart data={mktD}><CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)"/><XAxis dataKey="p" tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/><YAxis tickFormatter={v=>`$${(v/1000).toFixed(0)}K`} tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/><Tooltip formatter={v=>fmt$(v)} contentStyle={TT}/><Legend wrapperStyle={{color:"#8899BB",fontSize:11}}/><Line type="monotone" dataKey="nb" name="Burning Wood Avg" stroke={C.gold} strokeWidth={2.5} dot={{fill:C.gold,r:4}}/><Line type="monotone" dataKey="mls" name="MLS Overall Avg" stroke={C.teal} strokeWidth={2.5} dot={{fill:C.teal,r:4}} strokeDasharray="5 4"/></LineChart></ResponsiveContainer>
+          <div style={{marginTop:9,padding:"9px 13px",background:"rgba(45,122,79,0.09)",borderRadius:8,fontSize:11,color:"#AABBCC",lineHeight:1.6}}>✅ <strong style={{color:"#fff"}}>Your home is priced</strong> <strong style={{color:C.gold}}>$11,688 below</strong> the average sold home in your neighborhood — one of the most competitive options for buyers right now.</div>
         </Card>
       </div>
-
-      {/* Buyer Quotes */}
       <div style={{marginBottom:22}}>
         <Sec title="What Buyers Are Saying"/>
         <div style={{display:"flex",flexDirection:"column",gap:8}}>
-          {[
-            {quote:"Nice house. Something to think about.",                                          label:"Still considering it"},
-            {quote:"Showed well and was clean. Clients prefer a bigger kitchen and more space.",      label:"Positive showing experience"},
-          ].map((q,i)=>(
-            <div key={i} style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"12px 16px"}}>
-              <div style={{fontSize:13,color:"#BBCCDD",fontStyle:"italic",lineHeight:1.6}}>"{q.quote}"</div>
-              <div style={{fontSize:11,color:C.gold,marginTop:5,fontWeight:600}}>— {q.label}</div>
-            </div>
+          {[{quote:"Nice house. Something to think about.",label:"Still considering it"},{quote:"Showed well and was clean. Clients prefer a bigger kitchen and more space.",label:"Positive showing experience"}].map((q,i)=>(
+            <div key={i} style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"12px 16px"}}><div style={{fontSize:13,color:"#BBCCDD",fontStyle:"italic",lineHeight:1.6}}>"{q.quote}"</div><div style={{fontSize:11,color:C.gold,marginTop:5,fontWeight:600}}>— {q.label}</div></div>
           ))}
         </div>
       </div>
-
-      {/* Agent Note */}
       <div style={{background:"rgba(201,168,76,0.06)",border:"1px solid rgba(201,168,76,0.18)",borderRadius:12,padding:"16px 18px"}}>
         <div style={{fontSize:10,color:C.gold,fontWeight:700,letterSpacing:.9,marginBottom:6}}>NOTE FROM YOUR AGENT</div>
         <div style={{fontSize:13,color:"#AABBCC",lineHeight:1.7}}>Your home is showing well and is priced competitively. Buyers appreciate the condition and cleanliness of your property. I am actively following up with all showing agents and will be reaching out this week with a full strategy update. Please don't hesitate to contact me anytime with questions.</div>
         <div style={{marginTop:12,display:"flex",alignItems:"center",gap:10}}>
           <div style={{width:34,height:34,borderRadius:"50%",background:C.gold,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,color:C.dark,fontSize:13}}>CW</div>
-          <div>
-            <div style={{fontSize:13,fontWeight:700,color:"#fff"}}>Chris Winstead</div>
-            <div style={{fontSize:11,color:"#7788AA"}}>All City Homes · {PROP.phone} · {PROP.email}</div>
-          </div>
+          <div><div style={{fontSize:13,fontWeight:700,color:"#fff"}}>Chris Winstead</div><div style={{fontSize:11,color:"#7788AA"}}>All City Homes · {PROP.phone} · {PROP.email}</div></div>
         </div>
       </div>
     </div>
   );
 }
-
-/* ── Root ────────────────────────────────────────── */
-export default function App() {
-  const [view, setView] = useState("agent");
-  return (
+function App(){
+  const [view,setView]=useState("agent");
+  return(
     <div style={{minHeight:"100vh",background:C.dark,fontFamily:"'DM Sans',system-ui,sans-serif",color:"#fff"}}>
-
-      {/* Header */}
       <div style={{background:`linear-gradient(180deg,${C.navy} 0%,${C.dark} 100%)`,borderBottom:"1px solid rgba(201,168,76,0.14)",padding:"0 20px"}}>
         <div style={{maxWidth:900,margin:"0 auto"}}>
-
-          {/* Branding row */}
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 0 10px"}}>
             <div style={{display:"flex",alignItems:"center",gap:9}}>
               <div style={{width:30,height:30,background:C.gold,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",fontSize:15}}>🏙️</div>
-              <div>
-                <div style={{fontSize:14,fontWeight:800,color:"#fff",letterSpacing:.4}}>All City Homes</div>
-                <div style={{fontSize:10,color:"#5566AA",letterSpacing:1.4,textTransform:"uppercase"}}>Listing Intelligence</div>
-              </div>
+              <div><div style={{fontSize:14,fontWeight:800,color:"#fff",letterSpacing:.4}}>All City Homes</div><div style={{fontSize:10,color:"#5566AA",letterSpacing:1.4,textTransform:"uppercase"}}>Listing Intelligence</div></div>
             </div>
             <Badge label={PROP.status} color={C.green}/>
           </div>
-
-          {/* Property details */}
           <div style={{paddingBottom:13}}>
             <div style={{fontSize:20,fontWeight:800,fontFamily:"'Playfair Display',serif",color:"#fff",lineHeight:1.2}}>{PROP.address}</div>
             <div style={{fontSize:12,color:"#7788AA",marginTop:3,marginBottom:10}}>{PROP.city} · {PROP.subdivision} · MLS #{PROP.mls}</div>
             <div style={{display:"flex",gap:16,flexWrap:"wrap"}}>
-              {[
-                {l:"Price", v:PROP.price, gold:true},
-                {l:"Beds",  v:PROP.beds},
-                {l:"Baths", v:PROP.baths},
-                {l:"Sq Ft", v:PROP.sqft.toLocaleString()},
-                {l:"Built", v:PROP.yearBuilt},
-                {l:"Listed",v:PROP.listDate},
-              ].map((x,i)=>(
-                <div key={i}>
-                  <div style={{fontSize:i===0?15:13,fontWeight:800,color:x.gold?C.gold:"#fff"}}>{x.v}</div>
-                  <div style={{fontSize:9,color:"#445566",letterSpacing:.9,textTransform:"uppercase",marginTop:1}}>{x.l}</div>
-                </div>
+              {[{l:"Price",v:PROP.price,gold:true},{l:"Beds",v:PROP.beds},{l:"Baths",v:PROP.baths},{l:"Sq Ft",v:PROP.sqft.toLocaleString()},{l:"Built",v:PROP.yearBuilt},{l:"Listed",v:PROP.listDate}].map((x,i)=>(
+                <div key={i}><div style={{fontSize:i===0?15:13,fontWeight:800,color:x.gold?C.gold:"#fff"}}>{x.v}</div><div style={{fontSize:9,color:"#445566",letterSpacing:.9,textTransform:"uppercase",marginTop:1}}>{x.l}</div></div>
               ))}
             </div>
           </div>
-
-          {/* View tabs */}
           <div style={{display:"flex",gap:1,borderTop:"1px solid rgba(255,255,255,0.06)"}}>
             {[{id:"agent",label:"🔍 Agent View"},{id:"seller",label:"🏠 Seller Portal"}].map(tab=>(
-              <button key={tab.id} onClick={()=>setView(tab.id)} style={{
-                background:"none",border:"none",padding:"11px 18px",
-                fontSize:13,fontWeight:700,
-                color:view===tab.id?C.gold:"#445566",
-                borderBottom:`2px solid ${view===tab.id?C.gold:"transparent"}`,
-                transition:"all .15s",letterSpacing:.3
-              }}>{tab.label}</button>
+              <button key={tab.id} onClick={()=>setView(tab.id)} style={{background:"none",border:"none",padding:"11px 18px",fontSize:13,fontWeight:700,color:view===tab.id?C.gold:"#445566",borderBottom:`2px solid ${view===tab.id?C.gold:"transparent"}`,transition:"all .15s",letterSpacing:.3}}>{tab.label}</button>
             ))}
           </div>
         </div>
       </div>
-
-      {/* Content */}
       <div style={{maxWidth:900,margin:"0 auto",padding:"22px 20px 60px"}}>
-        {view==="agent" ? <AgentView/> : <SellerView/>}
+        {view==="agent"?<AgentView/>:<SellerView/>}
       </div>
-
-      {/* Footer */}
       <div style={{borderTop:"1px solid rgba(255,255,255,0.05)",padding:"12px 20px",textAlign:"center"}}>
         <div style={{fontSize:10,color:"#253545"}}>All City Homes · Chris Winstead · {PROP.email} · Data sourced from LERA MLS / SABOR · Updated March 9, 2026</div>
       </div>
     </div>
   );
 }
-
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
