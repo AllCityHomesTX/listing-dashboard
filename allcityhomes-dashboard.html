@@ -4,230 +4,561 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>3035 Heidi St — All City Homes</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.8.0/Recharts.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#071529;color:#fff;font-family:'DM Sans',system-ui,sans-serif}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#071529}
+:root{--gold:#C9A84C;--navy:#0B1F3A;--teal:#1A7A6E;--dark:#071529;--green:#2D7A4F;--red:#A63228;--blue:#5599DD;--light-gold:#E8D5A3}
+html,body{background:var(--dark);color:#fff;font-family:'DM Sans',system-ui,sans-serif;min-height:100vh}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--dark)}
 ::-webkit-scrollbar-thumb{background:rgba(201,168,76,.35);border-radius:3px}
-button{cursor:pointer;font-family:inherit}button:hover{opacity:.82}
+button{cursor:pointer;font-family:inherit;border:none;transition:opacity .15s}
+button:hover{opacity:.8}
+
+/* Header */
+#header{background:linear-gradient(180deg,var(--navy) 0%,var(--dark) 100%);border-bottom:1px solid rgba(201,168,76,.14);padding:0 20px}
+#header-inner{max-width:900px;margin:0 auto}
+#brand-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0 10px}
+#brand{display:flex;align-items:center;gap:9px}
+#brand-icon{width:30px;height:30px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px}
+#brand-name{font-size:14px;font-weight:800;color:#fff;letter-spacing:.4px}
+#brand-sub{font-size:10px;color:#5566AA;letter-spacing:1.4px;text-transform:uppercase}
+.badge{display:inline-block;border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}
+.badge-green{background:rgba(45,122,79,.2);color:var(--green);border:1px solid rgba(45,122,79,.4)}
+.badge-red{background:rgba(166,50,40,.2);color:var(--red);border:1px solid rgba(166,50,40,.4)}
+.badge-gold{background:rgba(201,168,76,.2);color:var(--gold);border:1px solid rgba(201,168,76,.4)}
+.badge-blue{background:rgba(85,153,221,.2);color:var(--blue);border:1px solid rgba(85,153,221,.4)}
+.badge-gray{background:rgba(68,102,170,.2);color:#4466AA;border:1px solid rgba(68,102,170,.4)}
+#prop-details{padding-bottom:13px}
+#prop-address{font-size:20px;font-weight:800;font-family:'Playfair Display',serif;color:#fff;line-height:1.2}
+#prop-sub{font-size:12px;color:#7788AA;margin:3px 0 10px}
+#prop-stats{display:flex;gap:16px;flex-wrap:wrap}
+.stat-item .stat-val{font-weight:800;color:#fff}
+.stat-item .stat-val.gold{color:var(--gold);font-size:15px}
+.stat-item .stat-val{font-size:13px}
+.stat-item .stat-lbl{font-size:9px;color:#445566;letter-spacing:.9px;text-transform:uppercase;margin-top:1px}
+
+/* Tabs */
+#tabs{display:flex;gap:1px;border-top:1px solid rgba(255,255,255,.06)}
+.tab-btn{background:none;border:none;padding:11px 18px;font-size:13px;font-weight:700;color:#445566;border-bottom:2px solid transparent;letter-spacing:.3px;transition:all .15s}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* Content */
+#content{max-width:900px;margin:0 auto;padding:22px 20px 60px}
+.view{display:none}.view.active{display:block}
+
+/* Toggle */
+.toggle-group{display:inline-flex;background:rgba(255,255,255,.05);border-radius:8px;padding:3px;gap:2px}
+.tog{background:transparent;color:#7788AA;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.4px;white-space:nowrap}
+.tog.active{background:var(--gold);color:var(--dark)}
+
+/* KPIs */
+.kpi-row{display:flex;gap:9px;margin-bottom:20px;flex-wrap:wrap}
+.kpi{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.14);border-radius:12px;padding:15px 17px;flex:1;min-width:110px}
+.kpi-icon{font-size:20px;margin-bottom:3px}
+.kpi-val{font-size:24px;font-weight:800;font-family:'Playfair Display',serif;line-height:1}
+.kpi-lbl{font-size:11px;color:#8899AA;margin-top:4px;font-weight:600;letter-spacing:.4px}
+.kpi-sub{font-size:11px;color:#55667A;margin-top:2px}
+
+/* Section headers */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.sec-title{display:flex;align-items:center;gap:8px}
+.sec-bar{width:3px;height:15px;background:var(--gold);border-radius:2px}
+.sec-lbl{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#8899BB;margin:0}
+
+/* Cards */
+.card{background:rgba(255,255,255,.03);border-radius:12px;padding:15px 13px;border:1px solid rgba(255,255,255,.06);margin-bottom:22px}
+
+/* Chips */
+.chip{border-radius:10px;padding:11px 13px;margin-bottom:8px;display:flex;gap:8px}
+.chip-warn{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2)}
+.chip-pos{background:rgba(45,122,79,.07);border:1px solid rgba(45,122,79,.2)}
+.chip-flag{background:rgba(166,50,40,.07);border:1px solid rgba(166,50,40,.2)}
+.chip-icon{font-size:13px;flex-shrink:0;margin-top:1px}
+.chip-title{font-size:12px;font-weight:700;margin-bottom:2px}
+.chip-warn .chip-title{color:var(--gold)}
+.chip-pos .chip-title{color:var(--green)}
+.chip-flag .chip-title{color:var(--red)}
+.chip-body{font-size:11px;color:#99AABB;line-height:1.6}
+
+/* Chart containers */
+.chart-wrap{position:relative;width:100%;margin:0}
+
+/* Showing log */
+.showing-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.showing-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:7px;margin-bottom:3px}
+.showing-agent{font-weight:700;color:#fff;font-size:13px}
+.showing-office{color:#55669A;font-size:11px;margin-left:8px}
+.showing-date{font-size:11px;color:#55669A;margin-top:3px}
+.showing-comment{margin-top:7px;font-size:12px;color:#8899BB;font-style:italic;border-left:2px solid rgba(201,168,76,.3);padding-left:9px}
+.showing-nofb{margin-top:4px;font-size:11px;color:#445566}
+
+/* Pie legend */
+.pie-legend{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:5px}
+.pie-legend-item{display:flex;align-items:center;gap:3px;font-size:10px;color:#8899AA}
+.pie-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* Price compare cards */
+.price-compare{display:flex;gap:9px;margin-bottom:13px;flex-wrap:wrap}
+.price-card{flex:1;min-width:115px;border-radius:10px;padding:10px 12px;text-align:center}
+.price-card-val{font-size:17px;font-weight:800;font-family:'Playfair Display',serif}
+.price-card-lbl{font-size:10px;color:#7788AA;margin-top:3px;font-weight:600}
+
+/* Takeaway box */
+.takeaway{margin-top:10px;padding:9px 13px;background:rgba(201,168,76,.07);border-radius:8px;font-size:11px;color:#8899AA}
+.takeaway-pos{background:rgba(45,122,79,.09);color:#AABBCC}
+
+/* Welcome banner */
+.welcome-banner{background:linear-gradient(135deg,rgba(201,168,76,.11),rgba(26,122,110,.07));border:1px solid rgba(201,168,76,.18);border-radius:13px;padding:17px 20px;margin-bottom:20px}
+.welcome-date{font-size:11px;color:var(--gold);font-weight:700;letter-spacing:.8px;margin-bottom:5px}
+.welcome-text{font-size:13px;color:#BBCCDD;line-height:1.7}
+
+/* Agent note */
+.agent-note{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.18);border-radius:12px;padding:16px 18px}
+.agent-note-lbl{font-size:10px;color:var(--gold);font-weight:700;letter-spacing:.9px;margin-bottom:6px}
+.agent-note-text{font-size:13px;color:#AABBCC;line-height:1.7}
+.agent-sig{margin-top:12px;display:flex;align-items:center;gap:10px}
+.agent-avatar{width:34px;height:34px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--dark);font-size:13px;flex-shrink:0}
+.agent-name{font-size:13px;font-weight:700;color:#fff}
+.agent-contact{font-size:11px;color:#7788AA}
+
+/* Buyer quotes */
+.quote-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:12px 16px;margin-bottom:8px}
+.quote-text{font-size:13px;color:#BBCCDD;font-style:italic;line-height:1.6}
+.quote-label{font-size:11px;color:var(--gold);margin-top:5px;font-weight:600}
+
+/* Footer */
+#footer{border-top:1px solid rgba(255,255,255,.05);padding:12px 20px;text-align:center}
+#footer p{font-size:10px;color:#253545}
+
+/* Feedback pie panels */
+.pie-panels{display:flex;gap:10px;flex-wrap:wrap}
+.pie-panel{flex:1;min-width:190px;background:rgba(255,255,255,.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.06)}
+.pie-panel-title{font-size:10px;color:#8899AA;margin-bottom:9px;font-weight:700;letter-spacing:.8px}
 </style>
 </head>
 <body>
-<div id="root"></div>
-<script type="text/babel">
-const {useState,useMemo}=React;
-const {BarChart,Bar,LineChart,Line,XAxis,YAxis,CartesianGrid,Tooltip,ResponsiveContainer,PieChart,Pie,Cell,Legend}=Recharts;
-const C={gold:"#C9A84C",navy:"#0B1F3A",teal:"#1A7A6E",lightGold:"#E8D5A3",dark:"#071529",green:"#2D7A4F",red:"#A63228",blue:"#5599DD"};
-const PROP={address:"3035 Heidi St",city:"San Antonio, TX 78247",price:"$272,000",beds:3,baths:2,sqft:1497,yearBuilt:1979,subdivision:"Burning Wood / Meadowwood",mls:"1940638",listDate:"Feb 11, 2026",agent:"Chris Winstead",phone:"(210) 985-7675",email:"chris@allcityhomestx.com",status:"ACTIVE",listed:new Date("2026-02-11")};
-const ALL_SHOWINGS=[
-  {d:new Date("2026-02-15"),date:"Feb 15",time:"4:15–5:00 PM",agent:"Sarah Dietz",office:"Keller Williams Heritage",interest:"Somewhat",price:"Just Right",comment:"Nice house. Something to think about."},
-  {d:new Date("2026-02-16"),date:"Feb 16",time:"10:30–11:15 AM",agent:"Ijeoma Okafor",office:"Real Broker, LLC",interest:"Not Interested",price:"Too High",comment:""},
-  {d:new Date("2026-02-16"),date:"Feb 16",time:"4:45–5:45 PM",agent:"Alison McLaughlin",office:"eXp Realty",interest:"—",price:"—",comment:"No feedback received"},
-  {d:new Date("2026-02-23"),date:"Feb 23",time:"9:00–10:00 AM",agent:"Brooke Smolka",office:"Coldwell Banker D'Ann Harper",interest:"Not Interested",price:"Just Right",comment:"Clients prefer a bigger kitchen and more space. Showed well and was clean."},
-  {d:new Date("2026-02-27"),date:"Feb 27",time:"11:00–11:30 AM",agent:"Michael Zamora",office:"Phyllis Browning Company",interest:"—",price:"—",comment:"No feedback received"},
-  {d:new Date("2026-02-28"),date:"Feb 28",time:"9:00–10:00 AM",agent:"Annie Bathalter",office:"Suburban Spaces, LLC",interest:"—",price:"—",comment:"No feedback received"},
+
+<!-- HEADER -->
+<div id="header">
+  <div id="header-inner">
+    <div id="brand-row">
+      <div id="brand">
+        <div id="brand-icon">🏙️</div>
+        <div>
+          <div id="brand-name">All City Homes</div>
+          <div id="brand-sub">Listing Intelligence</div>
+        </div>
+      </div>
+      <span class="badge badge-green">ACTIVE</span>
+    </div>
+    <div id="prop-details">
+      <div id="prop-address">3035 Heidi St</div>
+      <div id="prop-sub">San Antonio, TX 78247 · Burning Wood / Meadowwood · MLS #1940638</div>
+      <div id="prop-stats">
+        <div class="stat-item"><div class="stat-val gold">$272,000</div><div class="stat-lbl">Price</div></div>
+        <div class="stat-item"><div class="stat-val">3</div><div class="stat-lbl">Beds</div></div>
+        <div class="stat-item"><div class="stat-val">2</div><div class="stat-lbl">Baths</div></div>
+        <div class="stat-item"><div class="stat-val">1,497</div><div class="stat-lbl">Sq Ft</div></div>
+        <div class="stat-item"><div class="stat-val">1979</div><div class="stat-lbl">Built</div></div>
+        <div class="stat-item"><div class="stat-val">Feb 11, 2026</div><div class="stat-lbl">Listed</div></div>
+      </div>
+    </div>
+    <div id="tabs">
+      <button class="tab-btn active" onclick="switchView('agent')">🔍 Agent View</button>
+      <button class="tab-btn" onclick="switchView('seller')">🏠 Seller Portal</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div id="content">
+
+  <!-- ═══ AGENT VIEW ═══ -->
+  <div id="view-agent" class="view active">
+
+    <!-- KPIs -->
+    <div class="kpi-row" id="agent-kpis"></div>
+
+    <!-- AI Insights -->
+    <div style="margin-bottom:22px">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">AI Insights — Agent Advisory</h3></div></div>
+      <div class="chip chip-warn"><div class="chip-icon">⚡</div><div><div class="chip-title">Showing Momentum Has Stalled</div><div class="chip-body">All 6 showings occurred in the first 17 days (Feb 15–28). Zero showings in the last 9 days is an early sign of listing fatigue. A renewed marketing push and proactive seller conversation is recommended now.</div></div></div>
+      <div class="chip chip-flag"><div class="chip-icon">🚩</div><div><div class="chip-title">Price Perception Signal</div><div class="chip-body">1 of 3 buyers rated the price "Too High." Combined with 0 offers at 26 DOM, a pricing strategy conversation is warranted before the listing loses further momentum.</div></div></div>
+      <div class="chip chip-pos"><div class="chip-icon">✅</div><div><div class="chip-title">Condition Is Not the Issue</div><div class="chip-body">Buyers consistently note the home "showed well and was clean." Objections center on kitchen size and square footage — structural factors, not fixable through staging.</div></div></div>
+      <div class="chip chip-warn"><div class="chip-icon">⚡</div><div><div class="chip-title">Neighborhood Pricing Trend Declining</div><div class="chip-body">Burning Wood avg has dropped from $320K (2024) to $283K (2026) — an 11.5% decline — while the MLS overall rose 1.7%. At $272K this listing is priced competitively below the declining neighborhood average.</div></div></div>
+    </div>
+
+    <!-- Showing Activity Chart -->
+    <div style="margin-bottom:22px">
+      <div class="sec-hdr">
+        <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Showing Activity</h3></div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
+          <div class="toggle-group" id="ch-toggle">
+            <button class="tog active" onclick="setChMetric('showings',this)">Showings</button>
+            <button class="tog" onclick="setChMetric('emails',this)">Email Reach</button>
+            <button class="tog" onclick="setChMetric('interested',this)">Interested</button>
+          </div>
+          <div class="toggle-group" id="sr-toggle">
+            <button class="tog" onclick="setRange('sr',7,this)">7D</button>
+            <button class="tog" onclick="setRange('sr',30,this)">30D</button>
+            <button class="tog active" onclick="setRange('sr','all',this)">All Time</button>
+          </div>
+        </div>
+      </div>
+      <div class="card"><div class="chart-wrap" style="height:175px"><canvas id="activity-chart"></canvas></div></div>
+    </div>
+
+    <!-- Market Comparison -->
+    <div style="margin-bottom:22px">
+      <div class="sec-hdr">
+        <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Market Comparison — Avg Sales Price (3BR/2BA)</h3></div>
+        <div class="toggle-group">
+          <button class="tog" onclick="setMktRange('6m',this)">6 Mo</button>
+          <button class="tog" onclick="setMktRange('1y',this)">1 Yr</button>
+          <button class="tog active" onclick="setMktRange('3y',this)">3 Yr</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="chart-wrap" style="height:195px"><canvas id="market-chart"></canvas></div>
+        <div class="takeaway" style="margin-top:10px"><strong style="color:var(--gold)">Takeaway:</strong> At $272,000 this listing is priced <strong style="color:#fff">$11,688 below</strong> the current Burning Wood avg of $283,688.</div>
+      </div>
+    </div>
+
+    <!-- Buyer Feedback -->
+    <div style="margin-bottom:22px">
+      <div class="sec-hdr">
+        <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Buyer Feedback</h3></div>
+        <div class="toggle-group">
+          <button class="tog" onclick="setEmailRange(7,this)">Last 7 Days</button>
+          <button class="tog active" onclick="setEmailRange('all',this)">Since Listing</button>
+        </div>
+      </div>
+      <div class="pie-panels">
+        <div class="pie-panel">
+          <div class="pie-panel-title">BUYER INTEREST (MLS EMAILS)</div>
+          <div class="chart-wrap" style="height:125px"><canvas id="interest-pie"></canvas></div>
+          <div class="pie-legend" id="interest-legend"></div>
+        </div>
+        <div class="pie-panel">
+          <div class="pie-panel-title">PRICE OPINION (SHOWINGS)</div>
+          <div class="chart-wrap" style="height:125px"><canvas id="price-pie"></canvas></div>
+          <div class="pie-legend" id="price-legend"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Showing Log -->
+    <div>
+      <div class="sec-hdr">
+        <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl" id="log-title">Showing Log (6 of 6)</h3></div>
+        <div class="toggle-group">
+          <button class="tog" onclick="setRange('log',7,this)">7D</button>
+          <button class="tog" onclick="setRange('log',30,this)">30D</button>
+          <button class="tog active" onclick="setRange('log','all',this)">All Time</button>
+        </div>
+      </div>
+      <div id="showing-log"></div>
+    </div>
+
+  </div><!-- /agent -->
+
+  <!-- ═══ SELLER VIEW ═══ -->
+  <div id="view-seller" class="view">
+
+    <div class="welcome-banner">
+      <div class="welcome-date">YOUR LISTING UPDATE · MARCH 9, 2026</div>
+      <div class="welcome-text">Your home has been on the market for <strong style="color:#fff" id="seller-dom">26 days</strong> and has received <strong style="color:#fff">6 showings</strong> from qualified buyers. Chris Winstead is actively marketing your property and monitoring all activity on your behalf.</div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-icon">🏡</div><div class="kpi-val" style="color:var(--gold)">$272K</div><div class="kpi-lbl">Your List Price</div><div class="kpi-sub">Competitive in your area</div></div>
+      <div class="kpi"><div class="kpi-icon">🚶</div><div class="kpi-val" style="color:var(--teal)">6</div><div class="kpi-lbl">Buyers Toured</div><div class="kpi-sub">Since Feb 11, 2026</div></div>
+      <div class="kpi"><div class="kpi-icon">📬</div><div class="kpi-val" style="color:var(--blue)">186</div><div class="kpi-lbl">Buyers Notified</div><div class="kpi-sub">Via MLS email alerts</div></div>
+      <div class="kpi"><div class="kpi-icon">⭐</div><div class="kpi-val" style="color:var(--light-gold)">3.5/5</div><div class="kpi-lbl">Avg Buyer Rating</div><div class="kpi-sub">Based on 3 responses</div></div>
+    </div>
+
+    <!-- Seller showing timeline -->
+    <div style="margin-bottom:22px">
+      <div class="sec-hdr">
+        <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Your Showing Timeline</h3></div>
+        <div class="toggle-group">
+          <button class="tog" onclick="setRange('stl',7,this)">7D</button>
+          <button class="tog" onclick="setRange('stl',30,this)">30D</button>
+          <button class="tog active" onclick="setRange('stl','all',this)">All Time</button>
+        </div>
+      </div>
+      <div class="card"><div class="chart-wrap" style="height:155px"><canvas id="seller-timeline"></canvas></div></div>
+    </div>
+
+    <!-- Price compare -->
+    <div style="margin-bottom:22px">
+      <div class="sec-hdr">
+        <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">How Your Price Compares</h3></div>
+        <div class="toggle-group">
+          <button class="tog" onclick="setMktRange2('6m',this)">6 Mo</button>
+          <button class="tog" onclick="setMktRange2('1y',this)">1 Yr</button>
+          <button class="tog active" onclick="setMktRange2('3y',this)">3 Yr</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="price-compare">
+          <div class="price-card" style="background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25)"><div class="price-card-val" style="color:var(--gold)">$272,000</div><div class="price-card-lbl">Your List Price</div></div>
+          <div class="price-card" style="background:rgba(85,153,221,.1);border:1px solid rgba(85,153,221,.25)"><div class="price-card-val" style="color:var(--blue)">$283,688</div><div class="price-card-lbl">Neighborhood Avg</div></div>
+          <div class="price-card" style="background:rgba(26,122,110,.1);border:1px solid rgba(26,122,110,.25)"><div class="price-card-val" style="color:var(--teal)">$346,046</div><div class="price-card-lbl">MLS Overall Avg</div></div>
+        </div>
+        <div class="chart-wrap" style="height:160px"><canvas id="seller-market"></canvas></div>
+        <div class="takeaway takeaway-pos" style="margin-top:9px">✅ <strong style="color:#fff">Your home is priced</strong> <strong style="color:var(--gold)">$11,688 below</strong> the average sold home in your neighborhood — one of the most competitive options for buyers right now.</div>
+      </div>
+    </div>
+
+    <!-- Buyer quotes -->
+    <div style="margin-bottom:22px">
+      <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">What Buyers Are Saying</h3></div></div>
+      <div class="quote-card"><div class="quote-text">"Nice house. Something to think about."</div><div class="quote-label">— Still considering it</div></div>
+      <div class="quote-card"><div class="quote-text">"Showed well and was clean. Clients prefer a bigger kitchen and more space."</div><div class="quote-label">— Positive showing experience</div></div>
+    </div>
+
+    <!-- Agent note -->
+    <div class="agent-note">
+      <div class="agent-note-lbl">NOTE FROM YOUR AGENT</div>
+      <div class="agent-note-text">Your home is showing well and is priced competitively. Buyers appreciate the condition and cleanliness of your property. I am actively following up with all showing agents and will be reaching out this week with a full strategy update. Please don't hesitate to contact me anytime with questions.</div>
+      <div class="agent-sig">
+        <div class="agent-avatar">CW</div>
+        <div>
+          <div class="agent-name">Chris Winstead</div>
+          <div class="agent-contact">All City Homes · (210) 985-7675 · chris@allcityhomestx.com</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /seller -->
+
+</div><!-- /content -->
+
+<div id="footer"><p>All City Homes · Chris Winstead · chris@allcityhomestx.com · Data sourced from LERA MLS / SABOR · Updated March 9, 2026</p></div>
+
+<script>
+// ── Data ─────────────────────────────────────────
+const SHOWINGS = [
+  {date:'Feb 15',ts:new Date('2026-02-15'),time:'4:15–5:00 PM',agent:'Sarah Dietz',office:'Keller Williams Heritage',interest:'Somewhat',price:'Just Right',comment:'Nice house. Something to think about.'},
+  {date:'Feb 16',ts:new Date('2026-02-16'),time:'10:30–11:15 AM',agent:'Ijeoma Okafor',office:'Real Broker, LLC',interest:'Not Interested',price:'Too High',comment:''},
+  {date:'Feb 16',ts:new Date('2026-02-16'),time:'4:45–5:45 PM',agent:'Alison McLaughlin',office:'eXp Realty',interest:'—',price:'—',comment:''},
+  {date:'Feb 23',ts:new Date('2026-02-23'),time:'9:00–10:00 AM',agent:'Brooke Smolka',office:'Coldwell Banker D\'Ann Harper',interest:'Not Interested',price:'Just Right',comment:'Clients prefer a bigger kitchen and more space. Showed well and was clean.'},
+  {date:'Feb 27',ts:new Date('2026-02-27'),time:'11:00–11:30 AM',agent:'Michael Zamora',office:'Phyllis Browning Company',interest:'—',price:'—',comment:''},
+  {date:'Feb 28',ts:new Date('2026-02-28'),time:'9:00–10:00 AM',agent:'Annie Bathalter',office:'Suburban Spaces, LLC',interest:'—',price:'—',comment:''},
 ];
-const ALL_WEEKLY=[
-  {week:"Feb 11",ws:new Date("2026-02-11"),showings:0,emails:30,interested:0},
-  {week:"Feb 15",ws:new Date("2026-02-15"),showings:3,emails:72,interested:2},
-  {week:"Feb 22",ws:new Date("2026-02-22"),showings:3,emails:54,interested:2},
-  {week:"Mar 1",ws:new Date("2026-03-01"),showings:0,emails:22,interested:0},
-  {week:"Mar 9",ws:new Date("2026-03-09"),showings:0,emails:8,interested:0},
+const WEEKLY = [
+  {week:'Feb 11',ws:new Date('2026-02-11'),showings:0,emails:30,interested:0},
+  {week:'Feb 15',ws:new Date('2026-02-15'),showings:3,emails:72,interested:2},
+  {week:'Feb 22',ws:new Date('2026-02-22'),showings:3,emails:54,interested:2},
+  {week:'Mar 1', ws:new Date('2026-03-01'),showings:0,emails:22,interested:0},
+  {week:'Mar 9', ws:new Date('2026-03-09'),showings:0,emails:8, interested:0},
 ];
-const MKT={
-  "6m":[{p:"Sep 2025",nb:290000,mls:344200},{p:"Nov 2025",nb:286000,mls:345100},{p:"Jan 2026",nb:284500,mls:345700},{p:"Feb 2026",nb:283688,mls:346046}],
-  "1y":[{p:"Aug 2025",nb:291000,mls:344000},{p:"Oct 2025",nb:287500,mls:345000},{p:"Dec 2025",nb:285000,mls:345500},{p:"Feb 2026",nb:283688,mls:346046}],
-  "3y":[{p:"Feb 2024",nb:320442,mls:340397},{p:"Feb 2025",nb:302567,mls:343935},{p:"Feb 2026",nb:283688,mls:346046}],
+const MKT = {
+  '6m':{labels:['Sep 2025','Nov 2025','Jan 2026','Feb 2026'],nb:[290000,286000,284500,283688],mls:[344200,345100,345700,346046]},
+  '1y':{labels:['Aug 2025','Oct 2025','Dec 2025','Feb 2026'],nb:[291000,287500,285000,283688],mls:[344000,345000,345500,346046]},
+  '3y':{labels:['Feb 2024','Feb 2025','Feb 2026'],nb:[320442,302567,283688],mls:[340397,343935,346046]},
 };
-const TODAY=new Date("2026-03-09");
-const fmt$=v=>`$${Number(v).toLocaleString()}`;
-function filterS(arr,days){if(days==="all")return arr;const cut=new Date(TODAY);cut.setDate(cut.getDate()-days);return arr.filter(x=>x.d>=cut);}
-function filterW(arr,days){if(days==="all")return arr;const cut=new Date(TODAY);cut.setDate(cut.getDate()-days);return arr.filter(x=>x.ws>=cut);}
-function dom(days){const max=Math.floor((TODAY-PROP.listed)/86400000);return days==="all"?max:Math.min(days,max);}
-function Toggle({value,onChange,opts}){return(<div style={{display:"inline-flex",background:"rgba(255,255,255,0.05)",borderRadius:8,padding:3,gap:2}}>{opts.map(o=>(<button key={o.v} onClick={()=>onChange(o.v)} style={{background:value===o.v?C.gold:"transparent",color:value===o.v?C.dark:"#7788AA",border:"none",padding:"5px 12px",borderRadius:6,fontSize:11,fontWeight:700,letterSpacing:0.4,transition:"all .15s",whiteSpace:"nowrap"}}>{o.l}</button>))}</div>);}
-const S_OPTS=[{v:7,l:"7D"},{v:30,l:"30D"},{v:"all",l:"All Time"}];
-const M_OPTS=[{v:"6m",l:"6 Mo"},{v:"1y",l:"1 Yr"},{v:"3y",l:"3 Yr"}];
-const EM_OPTS=[{v:7,l:"Last 7 Days"},{v:"all",l:"Since Listing"}];
-const CH_OPTS=[{v:"showings",l:"Showings"},{v:"emails",l:"Email Reach"},{v:"interested",l:"Interested"}];
-function Badge({label,color}){return <span style={{background:color+"22",color,border:`1px solid ${color}44`,borderRadius:4,padding:"2px 9px",fontSize:11,fontWeight:700,letterSpacing:.8,textTransform:"uppercase"}}>{label}</span>;}
-function KPI({icon,label,value,sub,color}){return(<div style={{background:"rgba(255,255,255,0.04)",border:"1px solid rgba(201,168,76,0.14)",borderRadius:12,padding:"15px 17px",flex:1,minWidth:110}}><div style={{fontSize:20,marginBottom:3}}>{icon}</div><div style={{fontSize:24,fontWeight:800,color:color||C.gold,fontFamily:"'Playfair Display',serif",lineHeight:1}}>{value}</div><div style={{fontSize:11,color:"#8899AA",marginTop:4,fontWeight:600,letterSpacing:.4}}>{label}</div>{sub&&<div style={{fontSize:11,color:"#55667A",marginTop:2}}>{sub}</div>}</div>);}
-function Sec({title,right}){return(<div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12,flexWrap:"wrap",gap:8}}><div style={{display:"flex",alignItems:"center",gap:8}}><div style={{width:3,height:15,background:C.gold,borderRadius:2}}/><h3 style={{margin:0,fontSize:11,fontWeight:700,letterSpacing:2,textTransform:"uppercase",color:"#8899BB"}}>{title}</h3></div>{right}</div>);}
-function Card({children}){return <div style={{background:"rgba(255,255,255,0.03)",borderRadius:12,padding:"15px 13px",border:"1px solid rgba(255,255,255,0.06)"}}>{children}</div>;}
-function Chip({type,title,body}){const clr={warning:C.gold,positive:C.green,flag:C.red};const ico={warning:"⚡",positive:"✅",flag:"🚩"};return(<div style={{background:`${clr[type]}11`,border:`1px solid ${clr[type]}33`,borderRadius:10,padding:"11px 13px",marginBottom:8}}><div style={{display:"flex",gap:8}}><span style={{fontSize:13}}>{ico[type]}</span><div><div style={{fontSize:12,fontWeight:700,color:clr[type],marginBottom:2}}>{title}</div><div style={{fontSize:11,color:"#99AABB",lineHeight:1.6}}>{body}</div></div></div></div>);}
-const TT={background:C.dark,border:`1px solid ${C.gold}44`,borderRadius:8,color:"#fff",fontSize:12};
-const Empty=({msg})=><div style={{textAlign:"center",color:"#445566",padding:"32px 0",fontSize:12}}>{msg}</div>;
-function AgentView(){
-  const [sr,setSr]=useState("all");
-  const [mr,setMr]=useState("3y");
-  const [er,setEr]=useState("all");
-  const [ch,setCh]=useState("showings");
-  const shows=useMemo(()=>filterS(ALL_SHOWINGS,sr),[sr]);
-  const weekly=useMemo(()=>filterW(ALL_WEEKLY,sr),[sr]);
-  const mktD=MKT[mr];
-  const days=dom(sr);
-  const eR=er===7?22:186,eI=er===7?1:4,eM=er===7?1:2,eN=er===7?1:6;
-  const intD=[{name:"Interested",value:eI,color:C.green},{name:"Maybe",value:eM,color:C.gold},{name:"Not Interested",value:eN,color:C.red}];
-  const prcD=[{name:"Just Right",value:sr===7?0:2,color:C.green},{name:"Too High",value:sr===7?1:1,color:C.red}];
-  const barC=ch==="showings"?C.gold:ch==="emails"?C.blue:C.green;
-  const hasFB=s=>s.comment&&s.comment!=="No feedback received"&&s.comment!=="";
-  return(
-    <div>
-      <div style={{display:"flex",gap:9,marginBottom:20,flexWrap:"wrap"}}>
-        <KPI icon="🏠" label="List Price" value="$272K" sub="$181.69 / sq ft" color={C.gold}/>
-        <KPI icon="📅" label="Days on Market" value={days} sub={`Listed ${PROP.listDate}`} color={C.blue}/>
-        <KPI icon="🚶" label="Showings" value={shows.length} sub={`${shows.filter(hasFB).length} with feedback`} color={C.teal}/>
-        <KPI icon="📧" label="Email Reach" value={eR} sub={`${eI} marked Interested`} color={C.lightGold}/>
-        <KPI icon="🔔" label="Last Showing" value="Feb 28" sub="9 days ago" color="#AA6688"/>
-      </div>
-      <div style={{marginBottom:22}}>
-        <Sec title="AI Insights — Agent Advisory"/>
-        <Chip type="warning" title="Showing Momentum Has Stalled" body="All 6 showings occurred in the first 17 days (Feb 15–28). Zero showings in the last 9 days is an early sign of listing fatigue. A renewed marketing push and proactive seller conversation is recommended now."/>
-        <Chip type="flag" title="Price Perception Signal" body="1 of 3 buyers rated the price 'Too High.' Combined with 0 offers at 26 DOM, a pricing strategy conversation is warranted before the listing loses further momentum."/>
-        <Chip type="positive" title="Condition Is Not the Issue" body="Buyers consistently note the home 'showed well and was clean.' Objections center on kitchen size and square footage — structural factors, not fixable through staging."/>
-        <Chip type="warning" title="Neighborhood Pricing Trend Declining" body="Burning Wood avg has dropped from $320K (2024) to $283K (2026) — an 11.5% decline — while the MLS overall rose 1.7%. At $272K this listing is priced competitively below the declining neighborhood average."/>
-      </div>
-      <div style={{marginBottom:22}}>
-        <Sec title="Showing Activity" right={<div style={{display:"flex",gap:7,flexWrap:"wrap"}}><Toggle value={ch} onChange={setCh} opts={CH_OPTS}/><Toggle value={sr} onChange={setSr} opts={S_OPTS}/></div>}/>
-        <Card>{weekly.length===0?<Empty msg="No data in this range."/>:<ResponsiveContainer width="100%" height={175}><BarChart data={weekly} barSize={32}><CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)"/><XAxis dataKey="week" tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/><YAxis tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false} allowDecimals={false}/><Tooltip contentStyle={TT}/><Bar dataKey={ch} name={ch.charAt(0).toUpperCase()+ch.slice(1)} fill={barC} radius={[5,5,0,0]}/></BarChart></ResponsiveContainer>}</Card>
-      </div>
-      <div style={{marginBottom:22}}>
-        <Sec title="Market Comparison — Avg Sales Price (3BR/2BA)" right={<Toggle value={mr} onChange={setMr} opts={M_OPTS}/>}/>
-        <Card>
-          <ResponsiveContainer width="100%" height={195}><LineChart data={mktD}><CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)"/><XAxis dataKey="p" tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/><YAxis tickFormatter={v=>`$${(v/1000).toFixed(0)}K`} tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/><Tooltip formatter={v=>fmt$(v)} contentStyle={TT}/><Legend wrapperStyle={{color:"#8899BB",fontSize:11}}/><Line type="monotone" dataKey="nb" name="Burning Wood Avg" stroke={C.gold} strokeWidth={2.5} dot={{fill:C.gold,r:4}}/><Line type="monotone" dataKey="mls" name="MLS Overall Avg" stroke={C.teal} strokeWidth={2.5} dot={{fill:C.teal,r:4}} strokeDasharray="5 4"/></LineChart></ResponsiveContainer>
-          <div style={{marginTop:10,padding:"9px 13px",background:"rgba(201,168,76,0.07)",borderRadius:8,fontSize:11,color:"#8899AA"}}><strong style={{color:C.gold}}>Takeaway:</strong> At $272,000 this listing is priced <strong style={{color:"#fff"}}>$11,688 below</strong> the current Burning Wood avg of $283,688.</div>
-        </Card>
-      </div>
-      <div style={{marginBottom:22}}>
-        <Sec title="Buyer Feedback" right={<Toggle value={er} onChange={setEr} opts={EM_OPTS}/>}/>
-        <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-          {[{title:"BUYER INTEREST (MLS emails)",data:intD},{title:"PRICE OPINION (showings)",data:prcD}].map((panel,pi)=>(
-            <div key={pi} style={{flex:1,minWidth:190,background:"rgba(255,255,255,0.03)",borderRadius:12,padding:16,border:"1px solid rgba(255,255,255,0.06)"}}>
-              <div style={{fontSize:10,color:"#8899AA",marginBottom:9,fontWeight:700,letterSpacing:.8}}>{panel.title}</div>
-              <ResponsiveContainer width="100%" height={125}><PieChart><Pie data={panel.data} cx="50%" cy="50%" innerRadius={34} outerRadius={50} dataKey="value" paddingAngle={3}>{panel.data.map((e,i)=><Cell key={i} fill={e.color}/>)}</Pie><Tooltip contentStyle={TT}/></PieChart></ResponsiveContainer>
-              <div style={{display:"flex",gap:7,justifyContent:"center",flexWrap:"wrap",marginTop:5}}>{panel.data.map((e,i)=>(<div key={i} style={{display:"flex",alignItems:"center",gap:3,fontSize:10}}><div style={{width:6,height:6,borderRadius:"50%",background:e.color}}/><span style={{color:"#8899AA"}}>{e.name}: <strong style={{color:"#fff"}}>{e.value}</strong></span></div>))}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div>
-        <Sec title={`Showing Log (${shows.length} of ${ALL_SHOWINGS.length})`} right={<Toggle value={sr} onChange={setSr} opts={S_OPTS}/>}/>
-        {shows.length===0?<Card><Empty msg={`No showings in the last ${sr} days.`}/></Card>:
-          <div style={{display:"flex",flexDirection:"column",gap:8}}>
-            {shows.map((s,i)=>(
-              <div key={i} style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"12px 14px"}}>
-                <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:7}}>
-                  <div><span style={{fontWeight:700,color:"#fff",fontSize:13}}>{s.agent}</span><span style={{color:"#55669A",fontSize:11,marginLeft:8}}>{s.office}</span></div>
-                  <div style={{display:"flex",gap:5,flexWrap:"wrap"}}><Badge label={s.interest} color={s.interest==="Not Interested"?C.red:s.interest==="Somewhat"?C.gold:s.interest==="—"?"#4466AA":C.green}/>{s.price!=="—"&&<Badge label={s.price==="Just Right"?"✓ Price OK":"↑ Price High"} color={s.price==="Just Right"?C.teal:C.red}/>}</div>
-                </div>
-                <div style={{fontSize:11,color:"#55669A",marginTop:3}}>{s.date} · {s.time}</div>
-                {hasFB(s)&&<div style={{marginTop:7,fontSize:12,color:"#8899BB",fontStyle:"italic",borderLeft:`2px solid ${C.gold}44`,paddingLeft:9}}>"{s.comment}"</div>}
-                {!hasFB(s)&&<div style={{marginTop:4,fontSize:11,color:"#445566"}}>No feedback received</div>}
-              </div>
-            ))}
-          </div>
-        }
-      </div>
-    </div>
-  );
+const TODAY = new Date('2026-03-09');
+const C = {gold:'#C9A84C',teal:'#1A7A6E',blue:'#5599DD',green:'#2D7A4F',red:'#A63228'};
+
+// ── State ─────────────────────────────────────────
+let state = {sr:'all', log:'all', stl:'all', mkt:'3y', mkt2:'3y', ch:'showings', er:'all'};
+let charts = {};
+
+// ── Helpers ───────────────────────────────────────
+function filterByDays(arr, days, key) {
+  if (days === 'all') return arr;
+  const cut = new Date(TODAY); cut.setDate(cut.getDate() - days);
+  return arr.filter(x => x[key] >= cut);
 }
-function SellerView(){
-  const [sr,setSr]=useState("all");
-  const [mr,setMr]=useState("3y");
-  const shows=useMemo(()=>filterS(ALL_SHOWINGS,sr),[sr]);
-  const weekly=useMemo(()=>filterW(ALL_WEEKLY,sr),[sr]);
-  const mktD=MKT[mr];
-  const days=dom(sr);
-  return(
-    <div>
-      <div style={{background:"linear-gradient(135deg,rgba(201,168,76,0.11),rgba(26,122,110,0.07))",border:"1px solid rgba(201,168,76,0.18)",borderRadius:13,padding:"17px 20px",marginBottom:20}}>
-        <div style={{fontSize:11,color:C.gold,fontWeight:700,letterSpacing:.8,marginBottom:5}}>YOUR LISTING UPDATE · MARCH 9, 2026</div>
-        <div style={{fontSize:13,color:"#BBCCDD",lineHeight:1.7}}>Your home has been on the market for <strong style={{color:"#fff"}}>{days} days</strong> and has received <strong style={{color:"#fff"}}>{shows.length} showings</strong> from qualified buyers. Chris Winstead is actively marketing your property and monitoring all activity on your behalf.</div>
-      </div>
-      <div style={{display:"flex",gap:9,marginBottom:20,flexWrap:"wrap"}}>
-        <KPI icon="🏡" label="Your List Price" value="$272K" sub="Competitive in your area" color={C.gold}/>
-        <KPI icon="🚶" label="Buyers Toured" value={shows.length} sub={`Since ${PROP.listDate}`} color={C.teal}/>
-        <KPI icon="📬" label="Buyers Notified" value="186" sub="Via MLS email alerts" color={C.blue}/>
-        <KPI icon="⭐" label="Avg Buyer Rating" value="3.5/5" sub="Based on 3 responses" color={C.lightGold}/>
-      </div>
-      <div style={{marginBottom:22}}>
-        <Sec title="Your Showing Timeline" right={<Toggle value={sr} onChange={setSr} opts={S_OPTS}/>}/>
-        <Card>{weekly.length===0?<Empty msg="No showings in this range."/>:<ResponsiveContainer width="100%" height={155}><BarChart data={weekly} barSize={30}><CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)"/><XAxis dataKey="week" tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/><YAxis tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false} allowDecimals={false}/><Tooltip contentStyle={TT}/><Bar dataKey="showings" name="Showings" fill={C.teal} radius={[5,5,0,0]}/></BarChart></ResponsiveContainer>}</Card>
-      </div>
-      <div style={{marginBottom:22}}>
-        <Sec title="How Your Price Compares" right={<Toggle value={mr} onChange={setMr} opts={M_OPTS}/>}/>
-        <Card>
-          <div style={{display:"flex",gap:9,marginBottom:13,flexWrap:"wrap"}}>
-            {[{label:"Your List Price",value:"$272,000",color:C.gold},{label:"Neighborhood Avg",value:"$283,688",color:C.blue},{label:"MLS Overall Avg",value:"$346,046",color:C.teal}].map((item,i)=>(
-              <div key={i} style={{flex:1,minWidth:115,background:`${item.color}11`,border:`1px solid ${item.color}33`,borderRadius:10,padding:"10px 12px",textAlign:"center"}}><div style={{fontSize:17,fontWeight:800,color:item.color,fontFamily:"'Playfair Display',serif"}}>{item.value}</div><div style={{fontSize:10,color:"#7788AA",marginTop:3,fontWeight:600}}>{item.label}</div></div>
-            ))}
-          </div>
-          <ResponsiveContainer width="100%" height={160}><LineChart data={mktD}><CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)"/><XAxis dataKey="p" tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/><YAxis tickFormatter={v=>`$${(v/1000).toFixed(0)}K`} tick={{fill:"#7788AA",fontSize:11}} axisLine={false} tickLine={false}/><Tooltip formatter={v=>fmt$(v)} contentStyle={TT}/><Legend wrapperStyle={{color:"#8899BB",fontSize:11}}/><Line type="monotone" dataKey="nb" name="Burning Wood Avg" stroke={C.gold} strokeWidth={2.5} dot={{fill:C.gold,r:4}}/><Line type="monotone" dataKey="mls" name="MLS Overall Avg" stroke={C.teal} strokeWidth={2.5} dot={{fill:C.teal,r:4}} strokeDasharray="5 4"/></LineChart></ResponsiveContainer>
-          <div style={{marginTop:9,padding:"9px 13px",background:"rgba(45,122,79,0.09)",borderRadius:8,fontSize:11,color:"#AABBCC",lineHeight:1.6}}>✅ <strong style={{color:"#fff"}}>Your home is priced</strong> <strong style={{color:C.gold}}>$11,688 below</strong> the average sold home in your neighborhood — one of the most competitive options for buyers right now.</div>
-        </Card>
-      </div>
-      <div style={{marginBottom:22}}>
-        <Sec title="What Buyers Are Saying"/>
-        <div style={{display:"flex",flexDirection:"column",gap:8}}>
-          {[{quote:"Nice house. Something to think about.",label:"Still considering it"},{quote:"Showed well and was clean. Clients prefer a bigger kitchen and more space.",label:"Positive showing experience"}].map((q,i)=>(
-            <div key={i} style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"12px 16px"}}><div style={{fontSize:13,color:"#BBCCDD",fontStyle:"italic",lineHeight:1.6}}>"{q.quote}"</div><div style={{fontSize:11,color:C.gold,marginTop:5,fontWeight:600}}>— {q.label}</div></div>
-          ))}
-        </div>
-      </div>
-      <div style={{background:"rgba(201,168,76,0.06)",border:"1px solid rgba(201,168,76,0.18)",borderRadius:12,padding:"16px 18px"}}>
-        <div style={{fontSize:10,color:C.gold,fontWeight:700,letterSpacing:.9,marginBottom:6}}>NOTE FROM YOUR AGENT</div>
-        <div style={{fontSize:13,color:"#AABBCC",lineHeight:1.7}}>Your home is showing well and is priced competitively. Buyers appreciate the condition and cleanliness of your property. I am actively following up with all showing agents and will be reaching out this week with a full strategy update. Please don't hesitate to contact me anytime with questions.</div>
-        <div style={{marginTop:12,display:"flex",alignItems:"center",gap:10}}>
-          <div style={{width:34,height:34,borderRadius:"50%",background:C.gold,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,color:C.dark,fontSize:13}}>CW</div>
-          <div><div style={{fontSize:13,fontWeight:700,color:"#fff"}}>Chris Winstead</div><div style={{fontSize:11,color:"#7788AA"}}>All City Homes · {PROP.phone} · {PROP.email}</div></div>
-        </div>
-      </div>
-    </div>
-  );
+function fmt(v) { return '$' + Number(v).toLocaleString(); }
+function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+
+// ── View Switch ───────────────────────────────────
+function switchView(v) {
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('view-' + v).classList.add('active');
+  event.target.classList.add('active');
 }
-function App(){
-  const [view,setView]=useState("agent");
-  return(
-    <div style={{minHeight:"100vh",background:C.dark,fontFamily:"'DM Sans',system-ui,sans-serif",color:"#fff"}}>
-      <div style={{background:`linear-gradient(180deg,${C.navy} 0%,${C.dark} 100%)`,borderBottom:"1px solid rgba(201,168,76,0.14)",padding:"0 20px"}}>
-        <div style={{maxWidth:900,margin:"0 auto"}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 0 10px"}}>
-            <div style={{display:"flex",alignItems:"center",gap:9}}>
-              <div style={{width:30,height:30,background:C.gold,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",fontSize:15}}>🏙️</div>
-              <div><div style={{fontSize:14,fontWeight:800,color:"#fff",letterSpacing:.4}}>All City Homes</div><div style={{fontSize:10,color:"#5566AA",letterSpacing:1.4,textTransform:"uppercase"}}>Listing Intelligence</div></div>
-            </div>
-            <Badge label={PROP.status} color={C.green}/>
-          </div>
-          <div style={{paddingBottom:13}}>
-            <div style={{fontSize:20,fontWeight:800,fontFamily:"'Playfair Display',serif",color:"#fff",lineHeight:1.2}}>{PROP.address}</div>
-            <div style={{fontSize:12,color:"#7788AA",marginTop:3,marginBottom:10}}>{PROP.city} · {PROP.subdivision} · MLS #{PROP.mls}</div>
-            <div style={{display:"flex",gap:16,flexWrap:"wrap"}}>
-              {[{l:"Price",v:PROP.price,gold:true},{l:"Beds",v:PROP.beds},{l:"Baths",v:PROP.baths},{l:"Sq Ft",v:PROP.sqft.toLocaleString()},{l:"Built",v:PROP.yearBuilt},{l:"Listed",v:PROP.listDate}].map((x,i)=>(
-                <div key={i}><div style={{fontSize:i===0?15:13,fontWeight:800,color:x.gold?C.gold:"#fff"}}>{x.v}</div><div style={{fontSize:9,color:"#445566",letterSpacing:.9,textTransform:"uppercase",marginTop:1}}>{x.l}</div></div>
-              ))}
-            </div>
-          </div>
-          <div style={{display:"flex",gap:1,borderTop:"1px solid rgba(255,255,255,0.06)"}}>
-            {[{id:"agent",label:"🔍 Agent View"},{id:"seller",label:"🏠 Seller Portal"}].map(tab=>(
-              <button key={tab.id} onClick={()=>setView(tab.id)} style={{background:"none",border:"none",padding:"11px 18px",fontSize:13,fontWeight:700,color:view===tab.id?C.gold:"#445566",borderBottom:`2px solid ${view===tab.id?C.gold:"transparent"}`,transition:"all .15s",letterSpacing:.3}}>{tab.label}</button>
-            ))}
+
+// ── Toggle helpers ────────────────────────────────
+function activateTog(btn) {
+  btn.closest('.toggle-group').querySelectorAll('.tog').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function setRange(key, val, btn) { state[key] = val; activateTog(btn); render(); }
+function setChMetric(val, btn) { state.ch = val; activateTog(btn); renderActivityChart(); }
+function setMktRange(val, btn) { state.mkt = val; activateTog(btn); renderMarketChart(); }
+function setMktRange2(val, btn) { state.mkt2 = val; activateTog(btn); renderSellerMarket(); }
+function setEmailRange(val, btn) { state.er = val; activateTog(btn); renderPies(); }
+
+// ── Chart defaults ────────────────────────────────
+const GRID = {color:'rgba(255,255,255,0.06)'};
+const TICK = {color:'#7788AA',font:{size:11}};
+const TT = {backgroundColor:'#071529',borderColor:'rgba(201,168,76,0.3)',borderWidth:1,titleColor:'#fff',bodyColor:'#aaa',padding:8};
+
+// ── KPIs ──────────────────────────────────────────
+function renderKPIs() {
+  const shows = filterByDays(SHOWINGS, state.sr, 'ts');
+  const dom = state.sr === 'all' ? 26 : Math.min(state.sr, 26);
+  const eR = state.sr === 7 ? 22 : 186;
+  const eI = state.sr === 7 ? 1 : 4;
+  const kpis = [
+    {icon:'🏠',val:'$272K',lbl:'List Price',sub:'$181.69 / sq ft',color:C.gold},
+    {icon:'📅',val:dom,lbl:'Days on Market',sub:'Listed Feb 11, 2026',color:C.blue},
+    {icon:'🚶',val:shows.length,lbl:'Showings',sub:shows.filter(s=>s.comment).length+' with feedback',color:C.teal},
+    {icon:'📧',val:eR,lbl:'Email Reach',sub:eI+' marked Interested',color:'#E8D5A3'},
+    {icon:'🔔',val:'Feb 28',lbl:'Last Showing',sub:'9 days ago',color:'#AA6688'},
+  ];
+  document.getElementById('agent-kpis').innerHTML = kpis.map(k =>
+    `<div class="kpi"><div class="kpi-icon">${k.icon}</div><div class="kpi-val" style="color:${k.color}">${k.val}</div><div class="kpi-lbl">${k.lbl}</div><div class="kpi-sub">${k.sub}</div></div>`
+  ).join('');
+}
+
+// ── Activity Chart ────────────────────────────────
+function renderActivityChart() {
+  const wk = filterByDays(WEEKLY, state.sr, 'ws');
+  const colors = {showings:C.gold, emails:C.blue, interested:C.green};
+  const col = colors[state.ch];
+  destroyChart('activity');
+  const ctx = document.getElementById('activity-chart').getContext('2d');
+  charts.activity = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels: wk.map(w=>w.week),
+      datasets:[{data:wk.map(w=>w[state.ch]),backgroundColor:col,borderRadius:5,borderSkipped:false}]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{...TT}},
+      scales:{
+        x:{grid:GRID,ticks:TICK,border:{display:false}},
+        y:{grid:GRID,ticks:{...TICK,stepSize:1},border:{display:false}}
+      }
+    }
+  });
+}
+
+// ── Market Chart ──────────────────────────────────
+function renderMarketChart() {
+  const d = MKT[state.mkt];
+  destroyChart('market');
+  const ctx = document.getElementById('market-chart').getContext('2d');
+  charts.market = new Chart(ctx, {
+    type:'line',
+    data:{
+      labels:d.labels,
+      datasets:[
+        {label:'Burning Wood Avg',data:d.nb,borderColor:C.gold,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:C.gold,pointRadius:4,tension:.3},
+        {label:'MLS Overall Avg', data:d.mls,borderColor:C.teal,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:C.teal,pointRadius:4,tension:.3,borderDash:[5,4]},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#8899BB',font:{size:11}}},tooltip:{...TT,callbacks:{label:c=>fmt(c.raw)}}},
+      scales:{
+        x:{grid:GRID,ticks:TICK,border:{display:false}},
+        y:{grid:GRID,ticks:{...TICK,callback:v=>'$'+(v/1000).toFixed(0)+'K'},border:{display:false}}
+      }
+    }
+  });
+}
+
+// ── Pie Charts ────────────────────────────────────
+function renderPies() {
+  const eI = state.er===7?1:4, eM = state.er===7?1:2, eN = state.er===7?1:6;
+  const intData = [eI, eM, eN];
+  const intLabels = ['Interested','Maybe','Not Interested'];
+  const intColors = [C.green, C.gold, C.red];
+  const prcData = [2, 1];
+  const prcLabels = ['Just Right','Too High'];
+  const prcColors = [C.green, C.red];
+
+  function makePie(id, data, labels, colors) {
+    destroyChart(id);
+    const ctx = document.getElementById(id).getContext('2d');
+    charts[id] = new Chart(ctx, {
+      type:'doughnut',
+      data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0,hoverOffset:4}]},
+      options:{
+        responsive:true,maintainAspectRatio:false,cutout:'60%',
+        plugins:{legend:{display:false},tooltip:{...TT}}
+      }
+    });
+  }
+  makePie('interest-pie', intData, intLabels, intColors);
+  makePie('price-pie', prcData, prcLabels, prcColors);
+
+  document.getElementById('interest-legend').innerHTML = intLabels.map((l,i)=>
+    `<div class="pie-legend-item"><div class="pie-dot" style="background:${intColors[i]}"></div>${l}: <strong style="color:#fff;margin-left:2px">${intData[i]}</strong></div>`).join('');
+  document.getElementById('price-legend').innerHTML = prcLabels.map((l,i)=>
+    `<div class="pie-legend-item"><div class="pie-dot" style="background:${prcColors[i]}"></div>${l}: <strong style="color:#fff;margin-left:2px">${prcData[i]}</strong></div>`).join('');
+}
+
+// ── Showing Log ───────────────────────────────────
+function renderLog() {
+  const shows = filterByDays(SHOWINGS, state.log, 'ts');
+  document.getElementById('log-title').textContent = `Showing Log (${shows.length} of ${SHOWINGS.length})`;
+  const interestColor = {
+    'Not Interested':'badge-red','Somewhat':'badge-gold','—':'badge-gray','Interested':'badge-green'
+  };
+  document.getElementById('showing-log').innerHTML = shows.length === 0
+    ? `<div class="card" style="text-align:center;color:#445566;padding:32px">No showings in this range.</div>`
+    : shows.map(s => `
+      <div class="showing-card">
+        <div class="showing-top">
+          <div><span class="showing-agent">${s.agent}</span><span class="showing-office">${s.office}</span></div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            <span class="badge ${interestColor[s.interest]||'badge-gray'}">${s.interest}</span>
+            ${s.price!=='—' ? `<span class="badge ${s.price==='Just Right'?'badge-green':'badge-red'}">${s.price==='Just Right'?'✓ Price OK':'↑ Price High'}</span>` : ''}
           </div>
         </div>
-      </div>
-      <div style={{maxWidth:900,margin:"0 auto",padding:"22px 20px 60px"}}>
-        {view==="agent"?<AgentView/>:<SellerView/>}
-      </div>
-      <div style={{borderTop:"1px solid rgba(255,255,255,0.05)",padding:"12px 20px",textAlign:"center"}}>
-        <div style={{fontSize:10,color:"#253545"}}>All City Homes · Chris Winstead · {PROP.email} · Data sourced from LERA MLS / SABOR · Updated March 9, 2026</div>
-      </div>
-    </div>
-  );
+        <div class="showing-date">${s.date} · ${s.time}</div>
+        ${s.comment ? `<div class="showing-comment">"${s.comment}"</div>` : `<div class="showing-nofb">No feedback received</div>`}
+      </div>`).join('');
 }
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+
+// ── Seller Charts ─────────────────────────────────
+function renderSellerTimeline() {
+  const wk = filterByDays(WEEKLY, state.stl, 'ws');
+  destroyChart('seller-timeline');
+  const ctx = document.getElementById('seller-timeline').getContext('2d');
+  charts['seller-timeline'] = new Chart(ctx, {
+    type:'bar',
+    data:{labels:wk.map(w=>w.week),datasets:[{data:wk.map(w=>w.showings),backgroundColor:C.teal,borderRadius:5,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT}},scales:{x:{grid:GRID,ticks:TICK,border:{display:false}},y:{grid:GRID,ticks:{...TICK,stepSize:1},border:{display:false}}}}
+  });
+}
+
+function renderSellerMarket() {
+  const d = MKT[state.mkt2];
+  destroyChart('seller-market');
+  const ctx = document.getElementById('seller-market').getContext('2d');
+  charts['seller-market'] = new Chart(ctx, {
+    type:'line',
+    data:{labels:d.labels,datasets:[
+      {label:'Burning Wood Avg',data:d.nb,borderColor:C.gold,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:C.gold,pointRadius:4,tension:.3},
+      {label:'MLS Overall Avg',data:d.mls,borderColor:C.teal,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:C.teal,pointRadius:4,tension:.3,borderDash:[5,4]},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8899BB',font:{size:11}}},tooltip:{...TT,callbacks:{label:c=>fmt(c.raw)}}},scales:{x:{grid:GRID,ticks:TICK,border:{display:false}},y:{grid:GRID,ticks:{...TICK,callback:v=>'$'+(v/1000).toFixed(0)+'K'},border:{display:false}}}}
+  });
+}
+
+// ── Render all ────────────────────────────────────
+function render() {
+  renderKPIs();
+  renderActivityChart();
+  renderMarketChart();
+  renderPies();
+  renderLog();
+  renderSellerTimeline();
+  renderSellerMarket();
+}
+
+render();
 </script>
 </body>
 </html>
