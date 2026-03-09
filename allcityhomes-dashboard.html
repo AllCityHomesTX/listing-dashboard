@@ -5,136 +5,155 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>3035 Heidi St — All City Homes</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--gold:#C9A84C;--navy:#0B1F3A;--teal:#1A7A6E;--dark:#071529;--green:#2D7A4F;--red:#A63228;--blue:#5599DD;--light-gold:#E8D5A3}
-html,body{background:var(--dark);color:#fff;font-family:'DM Sans',system-ui,sans-serif;min-height:100vh}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--dark)}
-::-webkit-scrollbar-thumb{background:rgba(201,168,76,.35);border-radius:3px}
-button{cursor:pointer;font-family:inherit;border:none;transition:opacity .15s}
-button:hover{opacity:.8}
+:root{
+  --tan:#CCB091;
+  --tan-light:#E8D9C4;
+  --navy:#102548;
+  --olive:#2C3426;
+  --charcoal:#211F1F;
+  --offwhite:#EEEDE9;
+  --midgray:#8A8880;
+  --lightgray:#D6D4CF;
+  --green:#2D7A4F;
+  --red:#A63228;
+  --blue:#2A5EA8;
+  --white:#FFFFFF;
+  --card-border:#DDD9D3;
+}
+html,body{background:var(--offwhite);color:var(--charcoal);font-family:'Open Sans',system-ui,sans-serif;min-height:100vh}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--offwhite)}
+::-webkit-scrollbar-thumb{background:rgba(204,176,145,.5);border-radius:3px}
+button{cursor:pointer;font-family:inherit;border:none;transition:all .15s}
 
 /* Header */
-#header{background:linear-gradient(180deg,var(--navy) 0%,var(--dark) 100%);border-bottom:1px solid rgba(201,168,76,.14);padding:0 20px}
-#header-inner{max-width:900px;margin:0 auto}
+#header{background:var(--olive);border-bottom:3px solid var(--tan);}
+#header-inner{max-width:960px;margin:0 auto;padding:0 20px}
 #brand-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0 10px}
-#brand{display:flex;align-items:center;gap:9px}
-#brand-icon{width:30px;height:30px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px}
-#brand-name{font-size:14px;font-weight:800;color:#fff;letter-spacing:.4px}
-#brand-sub{font-size:10px;color:#5566AA;letter-spacing:1.4px;text-transform:uppercase}
-.badge{display:inline-block;border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}
-.badge-green{background:rgba(45,122,79,.2);color:var(--green);border:1px solid rgba(45,122,79,.4)}
-.badge-red{background:rgba(166,50,40,.2);color:var(--red);border:1px solid rgba(166,50,40,.4)}
-.badge-gold{background:rgba(201,168,76,.2);color:var(--gold);border:1px solid rgba(201,168,76,.4)}
-.badge-blue{background:rgba(85,153,221,.2);color:var(--blue);border:1px solid rgba(85,153,221,.4)}
-.badge-gray{background:rgba(68,102,170,.2);color:#4466AA;border:1px solid rgba(68,102,170,.4)}
-#prop-details{padding-bottom:13px}
-#prop-address{font-size:20px;font-weight:800;font-family:'Playfair Display',serif;color:#fff;line-height:1.2}
-#prop-sub{font-size:12px;color:#7788AA;margin:3px 0 10px}
-#prop-stats{display:flex;gap:16px;flex-wrap:wrap}
-.stat-item .stat-val{font-weight:800;color:#fff}
-.stat-item .stat-val.gold{color:var(--gold);font-size:15px}
-.stat-item .stat-val{font-size:13px}
-.stat-item .stat-lbl{font-size:9px;color:#445566;letter-spacing:.9px;text-transform:uppercase;margin-top:1px}
+#brand{display:flex;align-items:center;gap:10px}
+#brand-logo{font-family:'Lato',sans-serif;font-weight:900;font-size:18px;color:var(--white);letter-spacing:1.5px;text-transform:uppercase;line-height:1}
+#brand-logo span{display:block;font-size:9px;font-weight:400;letter-spacing:3px;color:var(--tan);margin-top:2px}
+.badge{display:inline-block;border-radius:3px;padding:3px 10px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;font-family:'Open Sans',sans-serif}
+.badge-green{background:rgba(45,122,79,.2);color:#4CAF7A;border:1px solid rgba(45,122,79,.4)}
+.badge-red{background:rgba(166,50,40,.15);color:#D45B52;border:1px solid rgba(166,50,40,.35)}
+.badge-tan{background:rgba(204,176,145,.2);color:var(--tan);border:1px solid rgba(204,176,145,.4)}
+.badge-blue{background:rgba(42,94,168,.2);color:#5B8FD4;border:1px solid rgba(42,94,168,.4)}
+.badge-gray{background:rgba(138,136,128,.15);color:var(--midgray);border:1px solid rgba(138,136,128,.3)}
+
+#prop-details{padding-bottom:14px}
+#prop-address{font-size:22px;font-weight:700;font-family:'Lato',sans-serif;color:var(--white);line-height:1.2}
+#prop-sub{font-size:11px;color:rgba(204,176,145,.75);margin:4px 0 10px;letter-spacing:.3px}
+#prop-stats{display:flex;gap:18px;flex-wrap:wrap}
+.stat-item .stat-val{font-weight:700;color:var(--white);font-size:13px;font-family:'Lato',sans-serif}
+.stat-item .stat-val.tan{color:var(--tan);font-size:15px}
+.stat-item .stat-lbl{font-size:9px;color:rgba(204,176,145,.6);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
 
 /* Tabs */
-#tabs{display:flex;gap:1px;border-top:1px solid rgba(255,255,255,.06)}
-.tab-btn{background:none;border:none;padding:11px 18px;font-size:13px;font-weight:700;color:#445566;border-bottom:2px solid transparent;letter-spacing:.3px;transition:all .15s}
-.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+#tabs{display:flex;gap:0;border-top:1px solid rgba(255,255,255,.1)}
+.tab-btn{background:none;border:none;padding:11px 20px;font-size:12px;font-weight:700;color:rgba(255,255,255,.5);border-bottom:2px solid transparent;letter-spacing:.5px;text-transform:uppercase;transition:all .15s;font-family:'Open Sans',sans-serif}
+.tab-btn.active{color:var(--tan);border-bottom-color:var(--tan)}
+.tab-btn:hover{color:var(--white)}
 
 /* Content */
-#content{max-width:900px;margin:0 auto;padding:22px 20px 60px}
+#content{max-width:960px;margin:0 auto;padding:24px 20px 60px}
 .view{display:none}.view.active{display:block}
 
 /* Toggle */
-.toggle-group{display:inline-flex;background:rgba(255,255,255,.05);border-radius:8px;padding:3px;gap:2px}
-.tog{background:transparent;color:#7788AA;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.4px;white-space:nowrap}
-.tog.active{background:var(--gold);color:var(--dark)}
+.toggle-group{display:inline-flex;background:var(--white);border:1px solid var(--card-border);border-radius:6px;padding:3px;gap:2px}
+.tog{background:transparent;color:var(--midgray);padding:5px 12px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:.3px;white-space:nowrap;font-family:'Open Sans',sans-serif}
+.tog.active{background:var(--navy);color:var(--white)}
+.tog:hover:not(.active){background:var(--offwhite)}
 
 /* KPIs */
-.kpi-row{display:flex;gap:9px;margin-bottom:20px;flex-wrap:wrap}
-.kpi{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.14);border-radius:12px;padding:15px 17px;flex:1;min-width:110px}
-.kpi-icon{font-size:20px;margin-bottom:3px}
-.kpi-val{font-size:24px;font-weight:800;font-family:'Playfair Display',serif;line-height:1}
-.kpi-lbl{font-size:11px;color:#8899AA;margin-top:4px;font-weight:600;letter-spacing:.4px}
-.kpi-sub{font-size:11px;color:#55667A;margin-top:2px}
+.kpi-row{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap}
+.kpi{background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:16px 18px;flex:1;min-width:120px;border-top:3px solid var(--tan)}
+.kpi-icon{font-size:18px;margin-bottom:4px}
+.kpi-val{font-size:22px;font-weight:900;font-family:'Lato',sans-serif;line-height:1;color:var(--navy)}
+.kpi-val.tan{color:var(--tan-dark,#A8895C)}
+.kpi-lbl{font-size:11px;color:var(--midgray);margin-top:5px;font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+.kpi-sub{font-size:11px;color:var(--lightgray);margin-top:2px}
 
 /* Section headers */
 .sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
 .sec-title{display:flex;align-items:center;gap:8px}
-.sec-bar{width:3px;height:15px;background:var(--gold);border-radius:2px}
-.sec-lbl{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#8899BB;margin:0}
+.sec-bar{width:3px;height:16px;background:var(--tan);border-radius:2px}
+.sec-lbl{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--midgray);margin:0;font-family:'Open Sans',sans-serif}
 
 /* Cards */
-.card{background:rgba(255,255,255,.03);border-radius:12px;padding:15px 13px;border:1px solid rgba(255,255,255,.06);margin-bottom:22px}
+.card{background:var(--white);border-radius:8px;padding:16px 15px;border:1px solid var(--card-border);margin-bottom:24px;box-shadow:0 1px 4px rgba(33,31,31,.06)}
 
-/* Chips */
-.chip{border-radius:10px;padding:11px 13px;margin-bottom:8px;display:flex;gap:8px}
-.chip-warn{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2)}
-.chip-pos{background:rgba(45,122,79,.07);border:1px solid rgba(45,122,79,.2)}
-.chip-flag{background:rgba(166,50,40,.07);border:1px solid rgba(166,50,40,.2)}
-.chip-icon{font-size:13px;flex-shrink:0;margin-top:1px}
-.chip-title{font-size:12px;font-weight:700;margin-bottom:2px}
-.chip-warn .chip-title{color:var(--gold)}
+/* Insight chips */
+.chip{border-radius:6px;padding:12px 14px;margin-bottom:8px;display:flex;gap:10px;border:1px solid}
+.chip-warn{background:rgba(204,176,145,.08);border-color:rgba(204,176,145,.3)}
+.chip-pos{background:rgba(45,122,79,.06);border-color:rgba(45,122,79,.25)}
+.chip-flag{background:rgba(166,50,40,.06);border-color:rgba(166,50,40,.25)}
+.chip-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.chip-title{font-size:12px;font-weight:700;margin-bottom:3px;font-family:'Lato',sans-serif}
+.chip-warn .chip-title{color:#8B6A3A}
 .chip-pos .chip-title{color:var(--green)}
 .chip-flag .chip-title{color:var(--red)}
-.chip-body{font-size:11px;color:#99AABB;line-height:1.6}
+.chip-body{font-size:12px;color:#6B6966;line-height:1.65}
 
 /* Chart containers */
 .chart-wrap{position:relative;width:100%;margin:0}
 
 /* Showing log */
-.showing-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.showing-card{background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:13px 15px;margin-bottom:8px;box-shadow:0 1px 3px rgba(33,31,31,.04)}
 .showing-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:7px;margin-bottom:3px}
-.showing-agent{font-weight:700;color:#fff;font-size:13px}
-.showing-office{color:#55669A;font-size:11px;margin-left:8px}
-.showing-date{font-size:11px;color:#55669A;margin-top:3px}
-.showing-comment{margin-top:7px;font-size:12px;color:#8899BB;font-style:italic;border-left:2px solid rgba(201,168,76,.3);padding-left:9px}
-.showing-nofb{margin-top:4px;font-size:11px;color:#445566}
+.showing-agent{font-weight:700;color:var(--navy);font-size:13px;font-family:'Lato',sans-serif}
+.showing-office{color:var(--midgray);font-size:11px;margin-left:6px}
+.showing-date{font-size:11px;color:var(--midgray);margin-top:3px}
+.showing-comment{margin-top:8px;font-size:12px;color:#6B6966;font-style:italic;border-left:3px solid var(--tan);padding-left:10px;line-height:1.6}
+.showing-nofb{margin-top:4px;font-size:11px;color:var(--lightgray)}
 
 /* Pie legend */
-.pie-legend{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:5px}
-.pie-legend-item{display:flex;align-items:center;gap:3px;font-size:10px;color:#8899AA}
-.pie-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.pie-legend{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:7px}
+.pie-legend-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--midgray)}
+.pie-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
-/* Price compare cards */
-.price-compare{display:flex;gap:9px;margin-bottom:13px;flex-wrap:wrap}
-.price-card{flex:1;min-width:115px;border-radius:10px;padding:10px 12px;text-align:center}
-.price-card-val{font-size:17px;font-weight:800;font-family:'Playfair Display',serif}
-.price-card-lbl{font-size:10px;color:#7788AA;margin-top:3px;font-weight:600}
+/* Price compare */
+.price-compare{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.price-card{flex:1;min-width:120px;border-radius:8px;padding:12px 14px;text-align:center;border:1px solid var(--card-border)}
+.price-card-val{font-size:18px;font-weight:900;font-family:'Lato',sans-serif}
+.price-card-lbl{font-size:10px;color:var(--midgray);margin-top:4px;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
 
-/* Takeaway box */
-.takeaway{margin-top:10px;padding:9px 13px;background:rgba(201,168,76,.07);border-radius:8px;font-size:11px;color:#8899AA}
-.takeaway-pos{background:rgba(45,122,79,.09);color:#AABBCC}
+/* Takeaway */
+.takeaway{margin-top:10px;padding:10px 14px;border-radius:6px;font-size:12px;line-height:1.6}
+.takeaway-warn{background:rgba(204,176,145,.1);color:#7A5E35;border:1px solid rgba(204,176,145,.25)}
+.takeaway-pos{background:rgba(45,122,79,.07);color:#1E5C39;border:1px solid rgba(45,122,79,.2)}
 
 /* Welcome banner */
-.welcome-banner{background:linear-gradient(135deg,rgba(201,168,76,.11),rgba(26,122,110,.07));border:1px solid rgba(201,168,76,.18);border-radius:13px;padding:17px 20px;margin-bottom:20px}
-.welcome-date{font-size:11px;color:var(--gold);font-weight:700;letter-spacing:.8px;margin-bottom:5px}
-.welcome-text{font-size:13px;color:#BBCCDD;line-height:1.7}
+.welcome-banner{background:var(--navy);border-radius:8px;padding:18px 22px;margin-bottom:22px;border-left:4px solid var(--tan)}
+.welcome-date{font-size:10px;color:var(--tan);font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px;font-family:'Open Sans',sans-serif}
+.welcome-text{font-size:13px;color:rgba(255,255,255,.85);line-height:1.7}
 
 /* Agent note */
-.agent-note{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.18);border-radius:12px;padding:16px 18px}
-.agent-note-lbl{font-size:10px;color:var(--gold);font-weight:700;letter-spacing:.9px;margin-bottom:6px}
-.agent-note-text{font-size:13px;color:#AABBCC;line-height:1.7}
-.agent-sig{margin-top:12px;display:flex;align-items:center;gap:10px}
-.agent-avatar{width:34px;height:34px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--dark);font-size:13px;flex-shrink:0}
-.agent-name{font-size:13px;font-weight:700;color:#fff}
-.agent-contact{font-size:11px;color:#7788AA}
+.agent-note{background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:18px 20px;border-top:3px solid var(--navy)}
+.agent-note-lbl{font-size:10px;color:var(--midgray);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.agent-note-text{font-size:13px;color:#4A4846;line-height:1.75}
+.agent-sig{margin-top:14px;display:flex;align-items:center;gap:12px;padding-top:14px;border-top:1px solid var(--offwhite)}
+.agent-avatar{width:38px;height:38px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--white);font-size:13px;flex-shrink:0;font-family:'Lato',sans-serif}
+.agent-name{font-size:14px;font-weight:700;color:var(--navy);font-family:'Lato',sans-serif}
+.agent-contact{font-size:11px;color:var(--midgray);margin-top:2px}
 
 /* Buyer quotes */
-.quote-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:12px 16px;margin-bottom:8px}
-.quote-text{font-size:13px;color:#BBCCDD;font-style:italic;line-height:1.6}
-.quote-label{font-size:11px;color:var(--gold);margin-top:5px;font-weight:600}
+.quote-card{background:var(--white);border:1px solid var(--card-border);border-radius:8px;padding:14px 18px;margin-bottom:8px;border-left:3px solid var(--tan)}
+.quote-text{font-size:13px;color:#4A4846;font-style:italic;line-height:1.65}
+.quote-label{font-size:11px;color:var(--tan);margin-top:6px;font-weight:600}
+
+/* Pie panels */
+.pie-panels{display:flex;gap:12px;flex-wrap:wrap}
+.pie-panel{flex:1;min-width:200px;background:var(--white);border-radius:8px;padding:16px;border:1px solid var(--card-border);box-shadow:0 1px 4px rgba(33,31,31,.06)}
+.pie-panel-title{font-size:9px;color:var(--midgray);margin-bottom:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
 
 /* Footer */
-#footer{border-top:1px solid rgba(255,255,255,.05);padding:12px 20px;text-align:center}
-#footer p{font-size:10px;color:#253545}
+#footer{border-top:1px solid var(--card-border);padding:14px 20px;text-align:center;background:var(--white)}
+#footer p{font-size:10px;color:var(--midgray);letter-spacing:.3px}
 
-/* Feedback pie panels */
-.pie-panels{display:flex;gap:10px;flex-wrap:wrap}
-.pie-panel{flex:1;min-width:190px;background:rgba(255,255,255,.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.06)}
-.pie-panel-title{font-size:10px;color:#8899AA;margin-bottom:9px;font-weight:700;letter-spacing:.8px}
+/* Page divider */
+.page-section{margin-bottom:26px}
 </style>
 </head>
 <body>
@@ -144,29 +163,25 @@ button:hover{opacity:.8}
   <div id="header-inner">
     <div id="brand-row">
       <div id="brand">
-        <div id="brand-icon">🏙️</div>
-        <div>
-          <div id="brand-name">All City Homes</div>
-          <div id="brand-sub">Listing Intelligence</div>
-        </div>
+        <div id="brand-logo">ALL CITY<span>HOMES</span></div>
       </div>
-      <span class="badge badge-green">ACTIVE</span>
+      <span class="badge badge-green">● ACTIVE</span>
     </div>
     <div id="prop-details">
-      <div id="prop-address">3035 Heidi St</div>
-      <div id="prop-sub">San Antonio, TX 78247 · Burning Wood / Meadowwood · MLS #1940638</div>
+      <div id="prop-address">3035 Heidi St, San Antonio TX 78247</div>
+      <div id="prop-sub">Burning Wood / Meadowwood · MLS #1940638 · North East ISD</div>
       <div id="prop-stats">
-        <div class="stat-item"><div class="stat-val gold">$272,000</div><div class="stat-lbl">Price</div></div>
-        <div class="stat-item"><div class="stat-val">3</div><div class="stat-lbl">Beds</div></div>
-        <div class="stat-item"><div class="stat-val">2</div><div class="stat-lbl">Baths</div></div>
+        <div class="stat-item"><div class="stat-val tan">$272,000</div><div class="stat-lbl">List Price</div></div>
+        <div class="stat-item"><div class="stat-val">3 BD</div><div class="stat-lbl">Beds</div></div>
+        <div class="stat-item"><div class="stat-val">2 BA</div><div class="stat-lbl">Baths</div></div>
         <div class="stat-item"><div class="stat-val">1,497</div><div class="stat-lbl">Sq Ft</div></div>
         <div class="stat-item"><div class="stat-val">1979</div><div class="stat-lbl">Built</div></div>
         <div class="stat-item"><div class="stat-val">Feb 11, 2026</div><div class="stat-lbl">Listed</div></div>
       </div>
     </div>
     <div id="tabs">
-      <button class="tab-btn active" onclick="switchView('agent')">🔍 Agent View</button>
-      <button class="tab-btn" onclick="switchView('seller')">🏠 Seller Portal</button>
+      <button class="tab-btn active" onclick="switchView('agent',event)">Agent View</button>
+      <button class="tab-btn" onclick="switchView('seller',event)">Seller Portal</button>
     </div>
   </div>
 </div>
@@ -174,32 +189,31 @@ button:hover{opacity:.8}
 <!-- CONTENT -->
 <div id="content">
 
-  <!-- ═══ AGENT VIEW ═══ -->
+  <!-- AGENT VIEW -->
   <div id="view-agent" class="view active">
 
-    <!-- KPIs -->
     <div class="kpi-row" id="agent-kpis"></div>
 
     <!-- AI Insights -->
-    <div style="margin-bottom:22px">
+    <div class="page-section">
       <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">AI Insights — Agent Advisory</h3></div></div>
       <div class="chip chip-warn"><div class="chip-icon">⚡</div><div><div class="chip-title">Showing Momentum Has Stalled</div><div class="chip-body">All 6 showings occurred in the first 17 days (Feb 15–28). Zero showings in the last 9 days is an early sign of listing fatigue. A renewed marketing push and proactive seller conversation is recommended now.</div></div></div>
-      <div class="chip chip-flag"><div class="chip-icon">🚩</div><div><div class="chip-title">Price Perception Signal</div><div class="chip-body">1 of 3 buyers rated the price "Too High." Combined with 0 offers at 26 DOM, a pricing strategy conversation is warranted before the listing loses further momentum.</div></div></div>
-      <div class="chip chip-pos"><div class="chip-icon">✅</div><div><div class="chip-title">Condition Is Not the Issue</div><div class="chip-body">Buyers consistently note the home "showed well and was clean." Objections center on kitchen size and square footage — structural factors, not fixable through staging.</div></div></div>
-      <div class="chip chip-warn"><div class="chip-icon">⚡</div><div><div class="chip-title">Neighborhood Pricing Trend Declining</div><div class="chip-body">Burning Wood avg has dropped from $320K (2024) to $283K (2026) — an 11.5% decline — while the MLS overall rose 1.7%. At $272K this listing is priced competitively below the declining neighborhood average.</div></div></div>
+      <div class="chip chip-flag"><div class="chip-icon">🚩</div><div><div class="chip-title">Price Perception Signal</div><div class="chip-body">1 of 3 buyers who left feedback rated price "Too High." Combined with 0 offers at 26 DOM, a pricing strategy conversation is warranted before the listing loses further momentum.</div></div></div>
+      <div class="chip chip-pos"><div class="chip-icon">✓</div><div><div class="chip-title">Condition Is Not the Issue</div><div class="chip-body">Buyers consistently note the home "showed well and was clean." Objections center on kitchen size and square footage — structural factors, not fixable through staging.</div></div></div>
+      <div class="chip chip-warn"><div class="chip-icon">⚡</div><div><div class="chip-title">Neighborhood Pricing Trend Declining</div><div class="chip-body">Burning Wood avg has dropped from $320K (2024) to $283K (2026) — an 11.5% decline — while MLS overall rose 1.7%. At $272K this listing is competitive below the declining neighborhood average.</div></div></div>
     </div>
 
-    <!-- Showing Activity Chart -->
-    <div style="margin-bottom:22px">
+    <!-- Showing Activity -->
+    <div class="page-section">
       <div class="sec-hdr">
         <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Showing Activity</h3></div>
-        <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
           <div class="toggle-group" id="ch-toggle">
             <button class="tog active" onclick="setChMetric('showings',this)">Showings</button>
             <button class="tog" onclick="setChMetric('emails',this)">Email Reach</button>
             <button class="tog" onclick="setChMetric('interested',this)">Interested</button>
           </div>
-          <div class="toggle-group" id="sr-toggle">
+          <div class="toggle-group">
             <button class="tog" onclick="setRange('sr',7,this)">7D</button>
             <button class="tog" onclick="setRange('sr',30,this)">30D</button>
             <button class="tog active" onclick="setRange('sr','all',this)">All Time</button>
@@ -210,7 +224,7 @@ button:hover{opacity:.8}
     </div>
 
     <!-- Market Comparison -->
-    <div style="margin-bottom:22px">
+    <div class="page-section">
       <div class="sec-hdr">
         <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Market Comparison — Avg Sales Price (3BR/2BA)</h3></div>
         <div class="toggle-group">
@@ -221,12 +235,12 @@ button:hover{opacity:.8}
       </div>
       <div class="card">
         <div class="chart-wrap" style="height:195px"><canvas id="market-chart"></canvas></div>
-        <div class="takeaway" style="margin-top:10px"><strong style="color:var(--gold)">Takeaway:</strong> At $272,000 this listing is priced <strong style="color:#fff">$11,688 below</strong> the current Burning Wood avg of $283,688.</div>
+        <div class="takeaway takeaway-warn" style="margin-top:10px"><strong>Takeaway:</strong> At $272,000 this listing is priced <strong>$11,688 below</strong> the current Burning Wood avg of $283,688.</div>
       </div>
     </div>
 
     <!-- Buyer Feedback -->
-    <div style="margin-bottom:22px">
+    <div class="page-section">
       <div class="sec-hdr">
         <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Buyer Feedback</h3></div>
         <div class="toggle-group">
@@ -236,20 +250,20 @@ button:hover{opacity:.8}
       </div>
       <div class="pie-panels">
         <div class="pie-panel">
-          <div class="pie-panel-title">BUYER INTEREST (MLS EMAILS)</div>
-          <div class="chart-wrap" style="height:125px"><canvas id="interest-pie"></canvas></div>
+          <div class="pie-panel-title">Buyer Interest (MLS Emails)</div>
+          <div class="chart-wrap" style="height:130px"><canvas id="interest-pie"></canvas></div>
           <div class="pie-legend" id="interest-legend"></div>
         </div>
         <div class="pie-panel">
-          <div class="pie-panel-title">PRICE OPINION (SHOWINGS)</div>
-          <div class="chart-wrap" style="height:125px"><canvas id="price-pie"></canvas></div>
+          <div class="pie-panel-title">Price Opinion (Showings)</div>
+          <div class="chart-wrap" style="height:130px"><canvas id="price-pie"></canvas></div>
           <div class="pie-legend" id="price-legend"></div>
         </div>
       </div>
     </div>
 
     <!-- Showing Log -->
-    <div>
+    <div class="page-section">
       <div class="sec-hdr">
         <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl" id="log-title">Showing Log (6 of 6)</h3></div>
         <div class="toggle-group">
@@ -263,23 +277,23 @@ button:hover{opacity:.8}
 
   </div><!-- /agent -->
 
-  <!-- ═══ SELLER VIEW ═══ -->
+  <!-- SELLER VIEW -->
   <div id="view-seller" class="view">
 
     <div class="welcome-banner">
-      <div class="welcome-date">YOUR LISTING UPDATE · MARCH 9, 2026</div>
-      <div class="welcome-text">Your home has been on the market for <strong style="color:#fff" id="seller-dom">26 days</strong> and has received <strong style="color:#fff">6 showings</strong> from qualified buyers. Chris Winstead is actively marketing your property and monitoring all activity on your behalf.</div>
+      <div class="welcome-date">Your Listing Update · March 9, 2026</div>
+      <div class="welcome-text">Your home has been on the market for <strong>26 days</strong> and has received <strong>6 showings</strong> from qualified buyers. Chris Winstead is actively marketing your property and monitoring all activity on your behalf.</div>
     </div>
 
     <div class="kpi-row">
-      <div class="kpi"><div class="kpi-icon">🏡</div><div class="kpi-val" style="color:var(--gold)">$272K</div><div class="kpi-lbl">Your List Price</div><div class="kpi-sub">Competitive in your area</div></div>
-      <div class="kpi"><div class="kpi-icon">🚶</div><div class="kpi-val" style="color:var(--teal)">6</div><div class="kpi-lbl">Buyers Toured</div><div class="kpi-sub">Since Feb 11, 2026</div></div>
-      <div class="kpi"><div class="kpi-icon">📬</div><div class="kpi-val" style="color:var(--blue)">186</div><div class="kpi-lbl">Buyers Notified</div><div class="kpi-sub">Via MLS email alerts</div></div>
-      <div class="kpi"><div class="kpi-icon">⭐</div><div class="kpi-val" style="color:var(--light-gold)">3.5/5</div><div class="kpi-lbl">Avg Buyer Rating</div><div class="kpi-sub">Based on 3 responses</div></div>
+      <div class="kpi"><div class="kpi-icon">🏡</div><div class="kpi-val">$272K</div><div class="kpi-lbl">Your List Price</div><div class="kpi-sub">Competitive in your area</div></div>
+      <div class="kpi"><div class="kpi-icon">🚶</div><div class="kpi-val">6</div><div class="kpi-lbl">Buyers Toured</div><div class="kpi-sub">Since Feb 11, 2026</div></div>
+      <div class="kpi"><div class="kpi-icon">📬</div><div class="kpi-val">186</div><div class="kpi-lbl">Buyers Notified</div><div class="kpi-sub">Via MLS email alerts</div></div>
+      <div class="kpi"><div class="kpi-icon">⭐</div><div class="kpi-val">3.5/5</div><div class="kpi-lbl">Avg Buyer Rating</div><div class="kpi-sub">Based on 3 responses</div></div>
     </div>
 
-    <!-- Seller showing timeline -->
-    <div style="margin-bottom:22px">
+    <!-- Seller timeline -->
+    <div class="page-section">
       <div class="sec-hdr">
         <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Your Showing Timeline</h3></div>
         <div class="toggle-group">
@@ -292,7 +306,7 @@ button:hover{opacity:.8}
     </div>
 
     <!-- Price compare -->
-    <div style="margin-bottom:22px">
+    <div class="page-section">
       <div class="sec-hdr">
         <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">How Your Price Compares</h3></div>
         <div class="toggle-group">
@@ -303,17 +317,17 @@ button:hover{opacity:.8}
       </div>
       <div class="card">
         <div class="price-compare">
-          <div class="price-card" style="background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25)"><div class="price-card-val" style="color:var(--gold)">$272,000</div><div class="price-card-lbl">Your List Price</div></div>
-          <div class="price-card" style="background:rgba(85,153,221,.1);border:1px solid rgba(85,153,221,.25)"><div class="price-card-val" style="color:var(--blue)">$283,688</div><div class="price-card-lbl">Neighborhood Avg</div></div>
-          <div class="price-card" style="background:rgba(26,122,110,.1);border:1px solid rgba(26,122,110,.25)"><div class="price-card-val" style="color:var(--teal)">$346,046</div><div class="price-card-lbl">MLS Overall Avg</div></div>
+          <div class="price-card" style="background:rgba(204,176,145,.1);border-color:rgba(204,176,145,.4)"><div class="price-card-val" style="color:#8B6A3A">$272,000</div><div class="price-card-lbl">Your List Price</div></div>
+          <div class="price-card" style="background:rgba(42,94,168,.07);border-color:rgba(42,94,168,.25)"><div class="price-card-val" style="color:var(--blue)">$283,688</div><div class="price-card-lbl">Neighborhood Avg</div></div>
+          <div class="price-card" style="background:rgba(16,37,72,.07);border-color:rgba(16,37,72,.2)"><div class="price-card-val" style="color:var(--navy)">$346,046</div><div class="price-card-lbl">MLS Overall Avg</div></div>
         </div>
-        <div class="chart-wrap" style="height:160px"><canvas id="seller-market"></canvas></div>
-        <div class="takeaway takeaway-pos" style="margin-top:9px">✅ <strong style="color:#fff">Your home is priced</strong> <strong style="color:var(--gold)">$11,688 below</strong> the average sold home in your neighborhood — one of the most competitive options for buyers right now.</div>
+        <div class="chart-wrap" style="height:165px"><canvas id="seller-market"></canvas></div>
+        <div class="takeaway takeaway-pos" style="margin-top:10px">✓ <strong>Your home is priced</strong> <strong style="color:#1E5C39">$11,688 below</strong> the average sold home in your neighborhood — one of the most competitive options for buyers right now.</div>
       </div>
     </div>
 
     <!-- Buyer quotes -->
-    <div style="margin-bottom:22px">
+    <div class="page-section">
       <div class="sec-hdr"><div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">What Buyers Are Saying</h3></div></div>
       <div class="quote-card"><div class="quote-text">"Nice house. Something to think about."</div><div class="quote-label">— Still considering it</div></div>
       <div class="quote-card"><div class="quote-text">"Showed well and was clean. Clients prefer a bigger kitchen and more space."</div><div class="quote-label">— Positive showing experience</div></div>
@@ -321,7 +335,7 @@ button:hover{opacity:.8}
 
     <!-- Agent note -->
     <div class="agent-note">
-      <div class="agent-note-lbl">NOTE FROM YOUR AGENT</div>
+      <div class="agent-note-lbl">Note From Your Agent</div>
       <div class="agent-note-text">Your home is showing well and is priced competitively. Buyers appreciate the condition and cleanliness of your property. I am actively following up with all showing agents and will be reaching out this week with a full strategy update. Please don't hesitate to contact me anytime with questions.</div>
       <div class="agent-sig">
         <div class="agent-avatar">CW</div>
@@ -336,7 +350,9 @@ button:hover{opacity:.8}
 
 </div><!-- /content -->
 
-<div id="footer"><p>All City Homes · Chris Winstead · chris@allcityhomestx.com · Data sourced from LERA MLS / SABOR · Updated March 9, 2026</p></div>
+<div id="footer">
+  <p>All City Homes · Chris Winstead · chris@allcityhomestx.com · Data sourced from LERA MLS / SABOR · Updated March 9, 2026</p>
+</div>
 
 <script>
 // ── Data ─────────────────────────────────────────
@@ -361,7 +377,18 @@ const MKT = {
   '3y':{labels:['Feb 2024','Feb 2025','Feb 2026'],nb:[320442,302567,283688],mls:[340397,343935,346046]},
 };
 const TODAY = new Date('2026-03-09');
-const C = {gold:'#C9A84C',teal:'#1A7A6E',blue:'#5599DD',green:'#2D7A4F',red:'#A63228'};
+
+// Brand colors
+const C = {
+  tan:'#CCB091',
+  navy:'#102548',
+  olive:'#2C3426',
+  green:'#2D7A4F',
+  red:'#A63228',
+  blue:'#2A5EA8',
+  midgray:'#8A8880',
+  lightgray:'#D6D4CF',
+};
 
 // ── State ─────────────────────────────────────────
 let state = {sr:'all', log:'all', stl:'all', mkt:'3y', mkt2:'3y', ch:'showings', er:'all'};
@@ -377,11 +404,11 @@ function fmt(v) { return '$' + Number(v).toLocaleString(); }
 function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
 
 // ── View Switch ───────────────────────────────────
-function switchView(v) {
+function switchView(v, e) {
   document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
   document.getElementById('view-' + v).classList.add('active');
-  event.target.classList.add('active');
+  e.target.classList.add('active');
 }
 
 // ── Toggle helpers ────────────────────────────────
@@ -396,9 +423,9 @@ function setMktRange2(val, btn) { state.mkt2 = val; activateTog(btn); renderSell
 function setEmailRange(val, btn) { state.er = val; activateTog(btn); renderPies(); }
 
 // ── Chart defaults ────────────────────────────────
-const GRID = {color:'rgba(255,255,255,0.06)'};
-const TICK = {color:'#7788AA',font:{size:11}};
-const TT = {backgroundColor:'#071529',borderColor:'rgba(201,168,76,0.3)',borderWidth:1,titleColor:'#fff',bodyColor:'#aaa',padding:8};
+const GRID = {color:'rgba(33,31,31,0.07)'};
+const TICK = {color:'#8A8880',font:{size:11,family:"'Open Sans',sans-serif"}};
+const TT = {backgroundColor:'#211F1F',borderColor:'rgba(204,176,145,0.4)',borderWidth:1,titleColor:'#fff',bodyColor:'#ccc',padding:9,cornerRadius:4};
 
 // ── KPIs ──────────────────────────────────────────
 function renderKPIs() {
@@ -407,38 +434,28 @@ function renderKPIs() {
   const eR = state.sr === 7 ? 22 : 186;
   const eI = state.sr === 7 ? 1 : 4;
   const kpis = [
-    {icon:'🏠',val:'$272K',lbl:'List Price',sub:'$181.69 / sq ft',color:C.gold},
-    {icon:'📅',val:dom,lbl:'Days on Market',sub:'Listed Feb 11, 2026',color:C.blue},
-    {icon:'🚶',val:shows.length,lbl:'Showings',sub:shows.filter(s=>s.comment).length+' with feedback',color:C.teal},
-    {icon:'📧',val:eR,lbl:'Email Reach',sub:eI+' marked Interested',color:'#E8D5A3'},
-    {icon:'🔔',val:'Feb 28',lbl:'Last Showing',sub:'9 days ago',color:'#AA6688'},
+    {icon:'🏠',val:'$272K',lbl:'List Price',sub:'$181.69 / sq ft'},
+    {icon:'📅',val:dom,lbl:'Days on Market',sub:'Listed Feb 11, 2026'},
+    {icon:'🚶',val:shows.length,lbl:'Showings',sub:shows.filter(s=>s.comment).length+' with feedback'},
+    {icon:'📧',val:eR,lbl:'Email Reach',sub:eI+' marked Interested'},
+    {icon:'🔔',val:'Feb 28',lbl:'Last Showing',sub:'9 days ago'},
   ];
   document.getElementById('agent-kpis').innerHTML = kpis.map(k =>
-    `<div class="kpi"><div class="kpi-icon">${k.icon}</div><div class="kpi-val" style="color:${k.color}">${k.val}</div><div class="kpi-lbl">${k.lbl}</div><div class="kpi-sub">${k.sub}</div></div>`
+    `<div class="kpi"><div class="kpi-icon">${k.icon}</div><div class="kpi-val">${k.val}</div><div class="kpi-lbl">${k.lbl}</div><div class="kpi-sub">${k.sub}</div></div>`
   ).join('');
 }
 
 // ── Activity Chart ────────────────────────────────
 function renderActivityChart() {
   const wk = filterByDays(WEEKLY, state.sr, 'ws');
-  const colors = {showings:C.gold, emails:C.blue, interested:C.green};
+  const colors = {showings:C.tan, emails:C.navy, interested:C.green};
   const col = colors[state.ch];
   destroyChart('activity');
   const ctx = document.getElementById('activity-chart').getContext('2d');
   charts.activity = new Chart(ctx, {
     type:'bar',
-    data:{
-      labels: wk.map(w=>w.week),
-      datasets:[{data:wk.map(w=>w[state.ch]),backgroundColor:col,borderRadius:5,borderSkipped:false}]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{...TT}},
-      scales:{
-        x:{grid:GRID,ticks:TICK,border:{display:false}},
-        y:{grid:GRID,ticks:{...TICK,stepSize:1},border:{display:false}}
-      }
-    }
+    data:{labels:wk.map(w=>w.week),datasets:[{data:wk.map(w=>w[state.ch]),backgroundColor:col,borderRadius:4,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT}},scales:{x:{grid:GRID,ticks:TICK,border:{display:false}},y:{grid:GRID,ticks:{...TICK,stepSize:1},border:{display:false}}}}
   });
 }
 
@@ -449,75 +466,52 @@ function renderMarketChart() {
   const ctx = document.getElementById('market-chart').getContext('2d');
   charts.market = new Chart(ctx, {
     type:'line',
-    data:{
-      labels:d.labels,
-      datasets:[
-        {label:'Burning Wood Avg',data:d.nb,borderColor:C.gold,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:C.gold,pointRadius:4,tension:.3},
-        {label:'MLS Overall Avg', data:d.mls,borderColor:C.teal,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:C.teal,pointRadius:4,tension:.3,borderDash:[5,4]},
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{labels:{color:'#8899BB',font:{size:11}}},tooltip:{...TT,callbacks:{label:c=>fmt(c.raw)}}},
-      scales:{
-        x:{grid:GRID,ticks:TICK,border:{display:false}},
-        y:{grid:GRID,ticks:{...TICK,callback:v=>'$'+(v/1000).toFixed(0)+'K'},border:{display:false}}
-      }
-    }
+    data:{labels:d.labels,datasets:[
+      {label:'Burning Wood Avg',data:d.nb,borderColor:C.tan,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:C.tan,pointRadius:4,tension:.3},
+      {label:'MLS Overall Avg',data:d.mls,borderColor:C.navy,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:C.navy,pointRadius:4,tension:.3,borderDash:[5,4]},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#6B6966',font:{size:11,family:"'Open Sans',sans-serif"}}},tooltip:{...TT,callbacks:{label:c=>fmt(c.raw)}}},scales:{x:{grid:GRID,ticks:TICK,border:{display:false}},y:{grid:GRID,ticks:{...TICK,callback:v=>'$'+(v/1000).toFixed(0)+'K'},border:{display:false}}}}
   });
 }
 
 // ── Pie Charts ────────────────────────────────────
 function renderPies() {
   const eI = state.er===7?1:4, eM = state.er===7?1:2, eN = state.er===7?1:6;
-  const intData = [eI, eM, eN];
-  const intLabels = ['Interested','Maybe','Not Interested'];
-  const intColors = [C.green, C.gold, C.red];
-  const prcData = [2, 1];
-  const prcLabels = ['Just Right','Too High'];
-  const prcColors = [C.green, C.red];
-
   function makePie(id, data, labels, colors) {
     destroyChart(id);
     const ctx = document.getElementById(id).getContext('2d');
     charts[id] = new Chart(ctx, {
       type:'doughnut',
-      data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0,hoverOffset:4}]},
-      options:{
-        responsive:true,maintainAspectRatio:false,cutout:'60%',
-        plugins:{legend:{display:false},tooltip:{...TT}}
-      }
+      data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:2,borderColor:'#fff',hoverOffset:4}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},tooltip:{...TT}}}
     });
   }
-  makePie('interest-pie', intData, intLabels, intColors);
-  makePie('price-pie', prcData, prcLabels, prcColors);
-
-  document.getElementById('interest-legend').innerHTML = intLabels.map((l,i)=>
-    `<div class="pie-legend-item"><div class="pie-dot" style="background:${intColors[i]}"></div>${l}: <strong style="color:#fff;margin-left:2px">${intData[i]}</strong></div>`).join('');
-  document.getElementById('price-legend').innerHTML = prcLabels.map((l,i)=>
-    `<div class="pie-legend-item"><div class="pie-dot" style="background:${prcColors[i]}"></div>${l}: <strong style="color:#fff;margin-left:2px">${prcData[i]}</strong></div>`).join('');
+  const intD=[eI,eM,eN], intL=['Interested','Maybe','Not Interested'], intC=[C.green,C.tan,C.red];
+  const prcD=[2,1], prcL=['Just Right','Too High'], prcC=[C.green,C.red];
+  makePie('interest-pie',intD,intL,intC);
+  makePie('price-pie',prcD,prcL,prcC);
+  document.getElementById('interest-legend').innerHTML = intL.map((l,i)=>`<div class="pie-legend-item"><div class="pie-dot" style="background:${intC[i]}"></div>${l}: <strong style="color:var(--charcoal);margin-left:2px">${intD[i]}</strong></div>`).join('');
+  document.getElementById('price-legend').innerHTML = prcL.map((l,i)=>`<div class="pie-legend-item"><div class="pie-dot" style="background:${prcC[i]}"></div>${l}: <strong style="color:var(--charcoal);margin-left:2px">${prcD[i]}</strong></div>`).join('');
 }
 
 // ── Showing Log ───────────────────────────────────
 function renderLog() {
   const shows = filterByDays(SHOWINGS, state.log, 'ts');
   document.getElementById('log-title').textContent = `Showing Log (${shows.length} of ${SHOWINGS.length})`;
-  const interestColor = {
-    'Not Interested':'badge-red','Somewhat':'badge-gold','—':'badge-gray','Interested':'badge-green'
-  };
+  const iC = {'Not Interested':'badge-red','Somewhat':'badge-tan','—':'badge-gray','Interested':'badge-green'};
   document.getElementById('showing-log').innerHTML = shows.length === 0
-    ? `<div class="card" style="text-align:center;color:#445566;padding:32px">No showings in this range.</div>`
-    : shows.map(s => `
+    ? `<div class="card" style="text-align:center;color:var(--midgray);padding:32px">No showings in this range.</div>`
+    : shows.map(s=>`
       <div class="showing-card">
         <div class="showing-top">
           <div><span class="showing-agent">${s.agent}</span><span class="showing-office">${s.office}</span></div>
           <div style="display:flex;gap:5px;flex-wrap:wrap">
-            <span class="badge ${interestColor[s.interest]||'badge-gray'}">${s.interest}</span>
-            ${s.price!=='—' ? `<span class="badge ${s.price==='Just Right'?'badge-green':'badge-red'}">${s.price==='Just Right'?'✓ Price OK':'↑ Price High'}</span>` : ''}
+            <span class="badge ${iC[s.interest]||'badge-gray'}">${s.interest}</span>
+            ${s.price!=='—'?`<span class="badge ${s.price==='Just Right'?'badge-green':'badge-red'}">${s.price==='Just Right'?'✓ Price OK':'↑ Too High'}</span>`:''}
           </div>
         </div>
         <div class="showing-date">${s.date} · ${s.time}</div>
-        ${s.comment ? `<div class="showing-comment">"${s.comment}"</div>` : `<div class="showing-nofb">No feedback received</div>`}
+        ${s.comment?`<div class="showing-comment">"${s.comment}"</div>`:`<div class="showing-nofb">No feedback received</div>`}
       </div>`).join('');
 }
 
@@ -526,38 +520,19 @@ function renderSellerTimeline() {
   const wk = filterByDays(WEEKLY, state.stl, 'ws');
   destroyChart('seller-timeline');
   const ctx = document.getElementById('seller-timeline').getContext('2d');
-  charts['seller-timeline'] = new Chart(ctx, {
-    type:'bar',
-    data:{labels:wk.map(w=>w.week),datasets:[{data:wk.map(w=>w.showings),backgroundColor:C.teal,borderRadius:5,borderSkipped:false}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT}},scales:{x:{grid:GRID,ticks:TICK,border:{display:false}},y:{grid:GRID,ticks:{...TICK,stepSize:1},border:{display:false}}}}
-  });
+  charts['seller-timeline'] = new Chart(ctx,{type:'bar',data:{labels:wk.map(w=>w.week),datasets:[{data:wk.map(w=>w.showings),backgroundColor:C.navy,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT}},scales:{x:{grid:GRID,ticks:TICK,border:{display:false}},y:{grid:GRID,ticks:{...TICK,stepSize:1},border:{display:false}}}}});
 }
-
 function renderSellerMarket() {
   const d = MKT[state.mkt2];
   destroyChart('seller-market');
   const ctx = document.getElementById('seller-market').getContext('2d');
-  charts['seller-market'] = new Chart(ctx, {
-    type:'line',
-    data:{labels:d.labels,datasets:[
-      {label:'Burning Wood Avg',data:d.nb,borderColor:C.gold,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:C.gold,pointRadius:4,tension:.3},
-      {label:'MLS Overall Avg',data:d.mls,borderColor:C.teal,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:C.teal,pointRadius:4,tension:.3,borderDash:[5,4]},
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8899BB',font:{size:11}}},tooltip:{...TT,callbacks:{label:c=>fmt(c.raw)}}},scales:{x:{grid:GRID,ticks:TICK,border:{display:false}},y:{grid:GRID,ticks:{...TICK,callback:v=>'$'+(v/1000).toFixed(0)+'K'},border:{display:false}}}}
-  });
+  charts['seller-market'] = new Chart(ctx,{type:'line',data:{labels:d.labels,datasets:[{label:'Burning Wood Avg',data:d.nb,borderColor:C.tan,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:C.tan,pointRadius:4,tension:.3},{label:'MLS Overall Avg',data:d.mls,borderColor:C.navy,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:C.navy,pointRadius:4,tension:.3,borderDash:[5,4]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#6B6966',font:{size:11}}},tooltip:{...TT,callbacks:{label:c=>fmt(c.raw)}}},scales:{x:{grid:GRID,ticks:TICK,border:{display:false}},y:{grid:GRID,ticks:{...TICK,callback:v=>'$'+(v/1000).toFixed(0)+'K'},border:{display:false}}}}});
 }
 
-// ── Render all ────────────────────────────────────
 function render() {
-  renderKPIs();
-  renderActivityChart();
-  renderMarketChart();
-  renderPies();
-  renderLog();
-  renderSellerTimeline();
-  renderSellerMarket();
+  renderKPIs(); renderActivityChart(); renderMarketChart();
+  renderPies(); renderLog(); renderSellerTimeline(); renderSellerMarket();
 }
-
 render();
 </script>
 </body>
