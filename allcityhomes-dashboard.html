@@ -204,6 +204,14 @@ button{cursor:pointer;font-family:inherit;border:none;transition:all .15s}
 .act-oh-guest{background:var(--offwhite);border-radius:5px;padding:6px 10px;margin-top:6px;font-size:12px;color:#4A4846}
 .act-oh-guest strong{color:var(--navy);font-size:11px}
 
+/* Visibility toggles */
+.vis-toggle{display:flex;align-items:center;cursor:pointer;user-select:none}
+.vis-toggle input{display:none}
+.vis-tog-pill{padding:7px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.4px;border:1.5px solid var(--card-border);color:var(--midgray);background:var(--offwhite);transition:all .15s;font-family:'Open Sans',sans-serif}
+.vis-toggle input:checked + .vis-tog-pill{background:var(--navy);color:#fff;border-color:var(--navy)}
+.vis-toggle:hover .vis-tog-pill{border-color:var(--navy);color:var(--navy)}
+.vis-toggle input:checked:hover + .vis-tog-pill{background:#1a3a70}
+
 /* Marketing log */
 .mlog-item{display:flex;gap:14px;padding-bottom:20px;position:relative}
 .mlog-item::before{content:'';position:absolute;left:6px;top:18px;bottom:0;width:1px;background:var(--lightgray)}
@@ -250,6 +258,7 @@ button{cursor:pointer;font-family:inherit;border:none;transition:all .15s}
     </div>
     <div id="tabs">
       <button class="tab-btn active" onclick="switchView('agent',event)">Agent View</button>
+      <button class="tab-btn" onclick="switchView('activity',event)">📋 Activity Log</button>
       <button class="tab-btn" onclick="switchView('seller',event)">Seller Portal</button>
       <button class="tab-btn" onclick="switchView('sites',event)">3rd-Party Sites</button>
       <button class="tab-btn" onclick="switchView('proceeds',event)">Net Proceeds</button>
@@ -258,7 +267,6 @@ button{cursor:pointer;font-family:inherit;border:none;transition:all .15s}
       <button class="tab-btn" onclick="switchView('scenario',event)">Price Scenarios</button>
       <button class="tab-btn" onclick="switchView('fees',event)">Fees Explained</button>
       <button class="tab-btn" onclick="switchView('media',event)">📷 Media</button>
-      <button class="tab-btn" onclick="switchView('activity',event)">📋 Activity Log</button>
     </div>
   </div>
 </div>
@@ -270,6 +278,41 @@ button{cursor:pointer;font-family:inherit;border:none;transition:all .15s}
   <div id="view-agent" class="view active">
 
     <div class="kpi-row" id="agent-kpis"></div>
+
+    <!-- Marketing Log Visibility Controls -->
+    <div class="page-section">
+      <div class="sec-hdr">
+        <div class="sec-title"><div class="sec-bar"></div><h3 class="sec-lbl">Marketing Log — Client Visibility</h3></div>
+        <div style="font-size:11px;color:var(--midgray);font-weight:600">Toggle what appears on the seller-facing log</div>
+      </div>
+      <div class="card" style="padding:16px 20px">
+        <div style="font-size:11px;color:var(--midgray);margin-bottom:14px;line-height:1.6">Choose which activity types are visible to your client in the <strong style="color:var(--navy)">Marketing Log</strong> tab. Turn off any category you want to keep internal.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px" id="mlog-visibility-toggles">
+          <label class="vis-toggle" id="vtog-calls">
+            <input type="checkbox" checked onchange="updateMlogVisibility('calls', this.checked)">
+            <span class="vis-tog-pill">📞 Calls Campaign</span>
+          </label>
+          <label class="vis-toggle" id="vtog-openhouse">
+            <input type="checkbox" checked onchange="updateMlogVisibility('openhouse', this.checked)">
+            <span class="vis-tog-pill">🏡 Open Houses</span>
+          </label>
+          <label class="vis-toggle" id="vtog-doorhangers">
+            <input type="checkbox" checked onchange="updateMlogVisibility('doorhangers', this.checked)">
+            <span class="vis-tog-pill">🚪 Door Hangers</span>
+          </label>
+          <label class="vis-toggle" id="vtog-mixed">
+            <input type="checkbox" checked onchange="updateMlogVisibility('mixed', this.checked)">
+            <span class="vis-tog-pill">📋 Mixed Activity</span>
+          </label>
+        </div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--offwhite);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span style="font-size:11px;color:var(--midgray)">Quick actions:</span>
+          <button onclick="setAllMlogVisibility(true)" style="background:var(--navy);color:#fff;font-size:10px;font-weight:700;padding:5px 12px;border-radius:4px;border:none;cursor:pointer;letter-spacing:.5px;text-transform:uppercase">Show All</button>
+          <button onclick="setAllMlogVisibility(false)" style="background:var(--offwhite);color:var(--midgray);font-size:10px;font-weight:700;padding:5px 12px;border-radius:4px;border:1px solid var(--card-border);cursor:pointer;letter-spacing:.5px;text-transform:uppercase">Hide All</button>
+          <span id="vis-status" style="font-size:11px;color:var(--green);font-weight:700;margin-left:4px"></span>
+        </div>
+      </div>
+    </div>
 
     <!-- AI Insights -->
     <div class="page-section">
@@ -1705,6 +1748,25 @@ function renderActivityKPIs() {
   syncMarketingLog();
 }
 
+// ── MARKETING LOG VISIBILITY ──────────────────────
+const MLOG_VISIBILITY = {calls: true, openhouse: true, doorhangers: true, mixed: true};
+
+function updateMlogVisibility(type, visible) {
+  MLOG_VISIBILITY[type] = visible;
+  const status = document.getElementById('vis-status');
+  const visCount = Object.values(MLOG_VISIBILITY).filter(Boolean).length;
+  status.textContent = visCount === 4 ? '' : `${visCount} of 4 types visible to client`;
+  syncMarketingLog();
+}
+
+function setAllMlogVisibility(visible) {
+  Object.keys(MLOG_VISIBILITY).forEach(k => { MLOG_VISIBILITY[k] = visible; });
+  document.querySelectorAll('#mlog-visibility-toggles input').forEach(cb => { cb.checked = visible; });
+  const status = document.getElementById('vis-status');
+  status.textContent = visible ? '' : '0 of 4 types visible to client';
+  syncMarketingLog();
+}
+
 const MLOG_TYPE_COLORS = {calls:'var(--red)',openhouse:'var(--green)',doorhangers:'var(--blue)',mixed:'var(--tan)'};
 const MLOG_TYPE_ICONS = {calls:'📞',openhouse:'🏡',doorhangers:'🚪',mixed:'📋'};
 const MLOG_TYPE_LABELS = {calls:'Outbound Calls Campaign',openhouse:'Open House',doorhangers:'Door Hanger Distribution',mixed:'Mixed Activity'};
@@ -1717,7 +1779,9 @@ function syncMarketingLog() {
   const fmtDate = d => { const [y,m,day] = d.split('-'); const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return `${months[+m-1]} ${+day}, ${y}`; };
 
   // Sort chronologically for the timeline (oldest last = bottom)
-  const sorted = [...ACTIVITY_LOG].sort((a,b) => new Date(b.date) - new Date(a.date));
+  const sorted = [...ACTIVITY_LOG]
+    .filter(e => MLOG_VISIBILITY[e.type] !== false)
+    .sort((a,b) => new Date(b.date) - new Date(a.date));
 
   container.innerHTML = sorted.map(e => {
     const color = MLOG_TYPE_COLORS[e.type] || 'var(--tan)';
